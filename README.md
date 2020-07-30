@@ -2,7 +2,7 @@
 
 Flutter modern bottom nav bar. Compatible with Android & iOS. You can customize it freely.
 
-<img src="" width="300" />
+<img src="https://github.com/NBK-Group/ss_bottom_navbar/blob/master/images/showcase.gif?raw=true" width="300" />
 
 ## Getting Started
 
