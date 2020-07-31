@@ -158,7 +158,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             Container(
               color: widget.backgroundColor ?? Colors.white,
             ),
-            if (_service.isBottomSlideVisible) SlideBox(),
+            SlideBox(),
             Container(
               alignment: Alignment.center,
               child: Row(
