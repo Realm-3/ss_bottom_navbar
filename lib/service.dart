@@ -12,7 +12,6 @@ class Service extends ChangeNotifier {
   List<Offset> positionsBig = [];
   List<GlobalKey> keys = [];
 
-  bool get isBottomSlideVisible => sizes.indexWhere((element) => element == Offset.zero) == -1 ?? false;
   int selected = 0;
   int clickedIndex = 0;
 

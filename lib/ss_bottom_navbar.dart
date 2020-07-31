@@ -115,6 +115,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     _service = Provider.of<Service>(context, listen: false);
+    var size = MediaQuery.of(context).padding;
 
     if (_service.items.isEmpty) {
       _service.init(widget.items,
@@ -145,34 +146,37 @@ class _BottomNavBarState extends State<BottomNavBar> {
     }
 
     return Container(
-      height: kBottomNavigationBarHeight,
-      color: _service.settings.backgroundColor,
-      child: Stack(
-        children: [
-          Container(
-            child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: _service.items.map((e) => _EmptyItem(e)).toList()),
-          ),
-          Container(
-            color: widget.backgroundColor ?? Colors.white,
-          ),
-          if (_service.isBottomSlideVisible) SlideBox(),
-          Container(
-            alignment: Alignment.center,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: _service.items
-                    .map((e) => NavItem(
-                          e,
-                          onTab: () {
-                            var index = _service.items.indexOf(e);
-                            _service.clickedIndex = index;
-                            if (_service.settings.selected == null) _service.setSelected(index);
-                            _updateIndex(index);
-                          },
-                        ))
-                    .toList()),
-          )
-        ],
+      color: Colors.white,
+      padding: EdgeInsets.only(bottom: size.bottom),
+      child: Container(
+        height: kBottomNavigationBarHeight,
+        child: Stack(
+          children: [
+            Container(
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: _service.items.map((e) => _EmptyItem(e)).toList()),
+            ),
+            Container(
+              color: widget.backgroundColor ?? Colors.white,
+            ),
+            SlideBox(),
+            Container(
+              alignment: Alignment.center,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: _service.items
+                      .map((e) => NavItem(
+                            e,
+                            onTab: () {
+                              var index = _service.items.indexOf(e);
+                              _service.clickedIndex = index;
+                              if (_service.settings.selected == null) _service.setSelected(index);
+                              _updateIndex(index);
+                            },
+                          ))
+                      .toList()),
+            )
+          ],
+        ),
       ),
     );
   }
