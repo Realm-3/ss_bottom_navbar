@@ -16,3 +16,4 @@ jobs:
         with:
           credential: ${{ secrets.DART_PUB_CREDENTIAL_JSON }}
           flutter_package: false
+          skip_test: true
