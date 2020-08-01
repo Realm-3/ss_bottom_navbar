@@ -22,6 +22,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   int _index = 0;
+  bool _isVisible = true;
 
   var _colors = [Colors.red, Colors.blue, Colors.green, Colors.orange, Colors.teal];
   var items = [
@@ -43,12 +44,20 @@ class _AppState extends State<App> {
         index: _index,
         children: _buildPages(),
       ),
-      bottomNavigationBar:
-      SSBottomNav(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(_isVisible ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
+        onPressed: () {
+          setState(() {
+            _isVisible = !_isVisible;
+          });
+        },
+      ),
+      bottomNavigationBar: SSBottomNav(
         items: items,
         color: Colors.black,
         selectedColor: Colors.white,
         unselectedColor: Colors.black,
+        visible: _isVisible,
         onTabSelected: (index) {
           print(index);
           setState(() {

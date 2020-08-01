@@ -15,25 +15,27 @@ class SSBottomNav extends StatefulWidget {
   final Color unselectedColor;
   final ValueChanged<int> onTabSelected;
   final List<BoxShadow> shadow;
+  final bool visible;
 
 //  final int selected;
   final Duration duration;
 
 //  final bool isWidthFixed;
 
-  SSBottomNav(
-      {@required this.items,
-      this.iconSize,
-      this.backgroundColor,
-      this.color,
-      this.selectedColor,
-      this.unselectedColor,
-      this.onTabSelected,
-      this.shadow,
+  SSBottomNav({
+    @required this.items,
+    this.iconSize,
+    this.backgroundColor,
+    this.color,
+    this.selectedColor,
+    this.unselectedColor,
+    this.onTabSelected,
+    this.shadow,
 //      this.selected,
-      this.duration
+    this.duration,
+    this.visible = true,
 //      this.isWidthFixed = false
-      });
+  });
 
   @override
   _SSBottomNavState createState() => _SSBottomNavState();
@@ -55,6 +57,7 @@ class _SSBottomNavState extends State<SSBottomNav> {
           shadow: widget.shadow,
           selected: null,
           isWidthFixed: false,
+          visible: widget.visible,
           duration: widget.duration),
     );
   }
@@ -72,6 +75,7 @@ class BottomNavBar extends StatefulWidget {
   final int selected;
   final bool isWidthFixed;
   final Duration duration;
+  final bool visible;
 
   BottomNavBar(
       {@required this.items,
@@ -84,6 +88,7 @@ class BottomNavBar extends StatefulWidget {
       this.shadow,
       this.selected,
       this.isWidthFixed,
+      this.visible,
       this.duration});
 
   @override
@@ -129,6 +134,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               onTabSelected: widget.onTabSelected,
               shadow: widget.shadow,
               isWidthFixed: widget.isWidthFixed,
+              visible: widget.visible,
               duration: widget.duration));
 
       if (!_isInit)
@@ -145,37 +151,43 @@ class _BottomNavBarState extends State<BottomNavBar> {
       _didUpdateWidget = false;
     }
 
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.only(bottom: size.bottom),
+    return Visibility(
+      visible: widget.visible,
+      maintainState: true,
+      maintainAnimation: true,
       child: Container(
-        height: kBottomNavigationBarHeight,
-        child: Stack(
-          children: [
-            Container(
-              child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: _service.items.map((e) => _EmptyItem(e)).toList()),
-            ),
-            Container(
-              color: widget.backgroundColor ?? Colors.white,
-            ),
-            SlideBox(),
-            Container(
-              alignment: Alignment.center,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: _service.items
-                      .map((e) => NavItem(
-                            e,
-                            onTab: () {
-                              var index = _service.items.indexOf(e);
-                              _service.clickedIndex = index;
-                              if (_service.settings.selected == null) _service.setSelected(index);
-                              _updateIndex(index);
-                            },
-                          ))
-                      .toList()),
-            )
-          ],
+        height: widget.visible ? kBottomNavigationBarHeight + size.bottom : 0,
+        color: Colors.white,
+        padding: EdgeInsets.only(bottom: size.bottom),
+        child: Container(
+          height: kBottomNavigationBarHeight,
+          child: Stack(
+            children: [
+              Container(
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: _service.items.map((e) => _EmptyItem(e)).toList()),
+              ),
+              Container(
+                color: widget.backgroundColor ?? Colors.white,
+              ),
+              SlideBox(),
+              Container(
+                alignment: Alignment.center,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: _service.items
+                        .map((e) => NavItem(
+                              e,
+                              onTab: () {
+                                var index = _service.items.indexOf(e);
+                                _service.clickedIndex = index;
+                                if (_service.settings.selected == null) _service.setSelected(index);
+                                _updateIndex(index);
+                              },
+                            ))
+                        .toList()),
+              )
+            ],
+          ),
         ),
       ),
     );

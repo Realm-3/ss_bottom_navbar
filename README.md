@@ -10,7 +10,7 @@ Flutter modern bottom nav bar. Compatible with Android & iOS. You can customize 
 
 ```yaml
 dependencies:
-  ss_bottom_navbar: ^0.0.3
+  ss_bottom_navbar: ^0.0.4
 ```
 
 ```bash
