@@ -92,6 +92,7 @@ class SSBottomNavBarSettings {
   int selected;
   bool isWidthFixed;
   Duration duration;
+  bool visible;
 
   SSBottomNavBarSettings(
       {this.items,
@@ -104,5 +105,6 @@ class SSBottomNavBarSettings {
       this.shadow,
       this.selected,
       this.isWidthFixed,
+      this.visible,
       this.duration});
 }
