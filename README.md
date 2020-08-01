@@ -1,5 +1,7 @@
 # ss_bottom_navbar
 
+![Publish to Pub.dev](https://github.com/NBK-Group/ss_bottom_navbar/workflows/Publish%20to%20Pub.dev/badge.svg)
+
 Flutter modern bottom nav bar. Compatible with Android & iOS. You can customize it freely.
 
 <img src="https://github.com/NBK-Group/ss_bottom_navbar/blob/master/images/showcase.gif?raw=true" width="300" />
