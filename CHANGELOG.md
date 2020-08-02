@@ -19,8 +19,14 @@
 
 -   Added GitGub action for publishing pub
 
-## 0.0.4 - 2020-09-01
+## 0.0.4 - 2020-08-01
 
 ### Added
 
 -   Added the feature mentioned on issue #10 
+
+## 0.0.5 - 2020-08-02
+
+### Added
+
+-  Fixed Github Actions
