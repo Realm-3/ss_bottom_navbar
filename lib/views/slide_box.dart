@@ -36,6 +36,13 @@ class _SlideBoxState extends State<SlideBox> with TickerProviderStateMixin {
           AnimatedPositioned(
             left: _posX - _sizeFactor,
             child: Container(
+              height: _height,
+              margin: EdgeInsets.only(top: _topPadding),
+              decoration: BoxDecoration(
+                  color: _service.settings.color,
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  boxShadow:
+                      _service.settings.shadow ?? [BoxShadow(offset: Offset(0, 3), blurRadius: 6, color: const Color(0xff000000).withOpacity(0.16))]),
               child: AnimatedSize(
                 curve: Curves.ease,
                 child: new Container(
@@ -44,12 +51,6 @@ class _SlideBoxState extends State<SlideBox> with TickerProviderStateMixin {
                   child: Container(
                     width: _width,
                     height: _height,
-                    decoration: BoxDecoration(
-                        color: _service.settings.color,
-//                        border: Border.all(color: Colors.red, width: 5),
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        boxShadow: _service.settings.shadow ??
-                            [BoxShadow(offset: Offset(0, 3), blurRadius: 6, color: const Color(0xff000000).withOpacity(0.16))]),
                   ),
                 ),
                 vsync: this,
