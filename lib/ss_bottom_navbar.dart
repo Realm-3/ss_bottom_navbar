@@ -16,6 +16,8 @@ class SSBottomNav extends StatefulWidget {
   final ValueChanged<int> onTabSelected;
   final List<BoxShadow> shadow;
   final bool visible;
+  final Widget bottomSheetWidget;
+  final int showBottomSheetAt;
 
 //  final int selected;
   final Duration duration;
@@ -31,6 +33,8 @@ class SSBottomNav extends StatefulWidget {
     this.unselectedColor,
     this.onTabSelected,
     this.shadow,
+    this.bottomSheetWidget,
+    this.showBottomSheetAt = 0,
 //      this.selected,
     this.duration,
     this.visible = true,
@@ -57,6 +61,8 @@ class _SSBottomNavState extends State<SSBottomNav> {
           shadow: widget.shadow,
           selected: null,
           isWidthFixed: false,
+          bottomSheetWidget: widget.bottomSheetWidget,
+          showBottomSheetAt: widget.showBottomSheetAt,
           visible: widget.visible,
           duration: widget.duration),
     );
@@ -76,6 +82,8 @@ class BottomNavBar extends StatefulWidget {
   final bool isWidthFixed;
   final Duration duration;
   final bool visible;
+  final Widget bottomSheetWidget;
+  final int showBottomSheetAt;
 
   BottomNavBar(
       {@required this.items,
@@ -89,6 +97,8 @@ class BottomNavBar extends StatefulWidget {
       this.selected,
       this.isWidthFixed,
       this.visible,
+      this.bottomSheetWidget,
+      this.showBottomSheetAt,
       this.duration});
 
   @override
@@ -179,6 +189,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
                               e,
                               onTab: () {
                                 var index = _service.items.indexOf(e);
+                                print(widget.showBottomSheetAt);
+                                if (index == widget.showBottomSheetAt) SSBottomSheet.show(context: context, child: widget.bottomSheetWidget);
                                 _service.clickedIndex = index;
                                 if (_service.settings.selected == null) _service.setSelected(index);
                                 _updateIndex(index);
@@ -272,5 +284,134 @@ class _EmptyItemState extends State<_EmptyItem> {
         ],
       ),
     );
+  }
+}
+
+class SSBottomSheet extends StatefulWidget {
+  final Color backgroundColor;
+  final Widget child;
+
+  SSBottomSheet({this.backgroundColor, this.child});
+
+  @override
+  _SSBottomSheetState createState() => _SSBottomSheetState();
+
+  static show({@required BuildContext context, @required child, backgroundColor = const Color(0xb3212121)}) {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (_, __, ___) {
+              return SSBottomSheet(
+                child: child,
+                backgroundColor: backgroundColor,
+              );
+            },
+            opaque: false));
+  }
+}
+
+class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProviderStateMixin {
+  Animation<double> _animation;
+  AnimationController _animationController;
+
+  final GlobalKey _childKey = GlobalKey();
+
+  double get _childHeight {
+    final RenderBox renderBox = _childKey.currentContext.findRenderObject();
+    return renderBox.size.height;
+  }
+
+  bool get _dismissUnderway => _animationController.status == AnimationStatus.reverse;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    _animation = Tween<double>(begin: 1, end: 0).animate(_animationController);
+
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) Navigator.pop(context);
+    });
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details) {
+    if (_dismissUnderway) return;
+
+    var change = details.primaryDelta / (_childHeight ?? details.primaryDelta);
+    _animationController.value -= change;
+  }
+
+  void _handleDragEnd(DragEndDetails details) {
+    if (_dismissUnderway) return;
+
+    if (details.velocity.pixelsPerSecond.dy < 0) return;
+
+    if (details.velocity.pixelsPerSecond.dy > 700) {
+      final double flingVelocity = -details.velocity.pixelsPerSecond.dy / _childHeight;
+      if (_animationController.value > 0.0) _animationController.fling(velocity: flingVelocity);
+    } else if (_animationController.value < 0.5) {
+      if (_animationController.value > 0.0) _animationController.fling(velocity: -1.0);
+    } else
+      _animationController.reverse();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var media = MediaQuery.of(context);
+    var width = media.size.width;
+    var bottomBarHeight = kBottomNavigationBarHeight + media.padding.bottom;
+
+    return WillPopScope(
+        onWillPop: onBackPressed,
+        child: GestureDetector(
+          onVerticalDragUpdate: _handleDragUpdate,
+          onVerticalDragEnd: _handleDragEnd,
+          child: Container(
+            margin: EdgeInsets.only(bottom: bottomBarHeight),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Container(
+                color: widget.backgroundColor,
+                child: Column(
+                  key: _childKey,
+                  children: <Widget>[
+                    Spacer(),
+                    ClipRect(
+                      child: FittedBox(
+                        alignment: Alignment.center,
+                        fit: BoxFit.fitWidth,
+                        child: AnimatedBuilder(
+                            animation: _animation,
+                            builder: (context, _) {
+                              return Transform(
+                                transform: Matrix4.translationValues(0.0, width * _animation.value, 0.0),
+                                child: Container(
+                                  width: width,
+                                  child: GestureDetector(behavior: HitTestBehavior.opaque, onTap: () {}, child: widget.child),
+                                ),
+                              );
+                            }),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          excludeFromSemantics: true,
+        ));
+  }
+
+  Future<bool> onBackPressed() {
+    _animationController.reverse();
+    return Future<bool>.value(false);
   }
 }

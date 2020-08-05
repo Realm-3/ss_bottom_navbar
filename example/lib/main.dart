@@ -39,6 +39,26 @@ class _AppState extends State<App> {
 
     _buildPages() => _colors.map((color) => _page(color)).toList();
 
+    _bottomSheet() => Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(Icons.camera_alt),
+            title: Text('Use Camera'),
+          ),
+          ListTile(
+            leading: Icon(Icons.photo_library),
+            title: Text('Choose from Gallery'),
+          ),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: Text('Write a Story'),
+          ),
+        ],
+      ),
+    );
+
     return Scaffold(
       body: IndexedStack(
         index: _index,
@@ -58,6 +78,8 @@ class _AppState extends State<App> {
         selectedColor: Colors.white,
         unselectedColor: Colors.black,
         visible: _isVisible,
+        bottomSheetWidget: _bottomSheet(),
+        showBottomSheetAt: 2,
         onTabSelected: (index) {
           print(index);
           setState(() {
