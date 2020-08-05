@@ -30,3 +30,9 @@
 ### Added
 
 -  Fixed Github Actions
+
+## 0.0.6 - 2020-08-05
+
+### Added
+
+-  Fixed issue #3
