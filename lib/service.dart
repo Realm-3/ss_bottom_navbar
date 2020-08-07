@@ -22,7 +22,7 @@ class Service extends ChangeNotifier {
   int selected = 0;
   int clickedIndex = 0;
 
-  get animationDuration => settings.duration ?? Duration(milliseconds: 400);
+  get animationDuration => settings.duration ?? Duration(milliseconds: 300);
   var state = SSBottomNavBarState.icon;
   var emptySelectedIndex = 0;
 

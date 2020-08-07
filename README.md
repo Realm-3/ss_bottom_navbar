@@ -1,4 +1,4 @@
-# ss_bottom_navbar
+# [ss_bottom_navbar](https://pub.dev/packages/ss_bottom_navbar)
 
 ![Publish to Pub.dev](https://github.com/NBK-Group/ss_bottom_navbar/workflows/Publish%20to%20Pub.dev/badge.svg)
 
@@ -10,7 +10,7 @@ Flutter modern bottom nav bar. Compatible with Android & iOS. You can customize 
 
 ```yaml
 dependencies:
-  ss_bottom_navbar: ^0.0.4
+  ss_bottom_navbar: 0.0.6
 ```
 
 ```bash
