@@ -54,6 +54,9 @@ class _AppState extends State<App> {
           ListTile(
             leading: Icon(Icons.edit),
             title: Text('Write a Story'),
+            onTap: () {
+              Navigator.maybePop(context);
+            },
           ),
         ],
       ),

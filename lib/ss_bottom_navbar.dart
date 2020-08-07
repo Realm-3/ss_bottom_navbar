@@ -292,24 +292,27 @@ class SSBottomSheet extends StatefulWidget {
   final Color backgroundColor;
   final Widget child;
   final ValueChanged<Offset> onPressed;
+  final double bottomMargin;
 
-  SSBottomSheet({Key key, this.backgroundColor, this.child, this.onPressed}) : super(key: key);
+  SSBottomSheet({Key key, this.backgroundColor, this.child, this.onPressed, this.bottomMargin}) : super(key: key);
 
   @override
   _SSBottomSheetState createState() => _SSBottomSheetState();
 
   static show(
-      {@required BuildContext context, @required child, backgroundColor = const Color(0xb3212121), ValueChanged<Offset> onPressed, Service service}) {
+      {@required BuildContext context,
+      @required child,
+      backgroundColor = const Color(0xb3212121),
+      double bottomMargin,
+      ValueChanged<Offset> onPressed,
+      Service service}) {
     Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
         pageBuilder: (_, __, ___) {
-          return ChangeNotifierProvider.value(
-            value: service,
-            child: SSBottomSheet(
-              key: ValueKey(2),
-              child: child,
-              backgroundColor: backgroundColor,
-              onPressed: onPressed,
-            ),
+          return SSBottomSheet(
+            child: child,
+            backgroundColor: backgroundColor,
+            onPressed: onPressed,
+            bottomMargin: bottomMargin,
           );
         },
         opaque: false));
@@ -388,16 +391,7 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context);
     var width = media.size.width;
-    var bottomBarHeight = kBottomNavigationBarHeight + media.padding.bottom;
-
-    var service = Provider.of<Service>(context, listen: false);
-
-    if (service.willPop && willPop) {
-      willPop = false;
-      service.willPop = false;
-      service = Provider.of<Service>(context, listen: false);
-      _pop();
-    }
+    var bottomBarHeight = widget.bottomMargin ?? kBottomNavigationBarHeight + media.padding.bottom;
 
     return WillPopScope(
         onWillPop: onBackPressed,
