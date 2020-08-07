@@ -261,7 +261,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                   print(widget.showBottomSheetAt);
                                   print(index);
                                   if (index == widget.showBottomSheetAt)
-                                    SSBottomSheet.show(context: context, child: widget.bottomSheetWidget, onPressed: _onPressed, service: _service);
+                                    SSBottomSheet.show(context: context, child: widget.bottomSheetWidget, onPressed: _onPressed);
                                   _service.clickedIndex = index;
                                   if (_service.settings.selected == null) _service.setSelected(index);
                                   _updateIndex(index);
@@ -304,8 +304,7 @@ class SSBottomSheet extends StatefulWidget {
       @required child,
       backgroundColor = const Color(0xb3212121),
       double bottomMargin,
-      ValueChanged<Offset> onPressed,
-      Service service}) {
+      ValueChanged<Offset> onPressed}) {
     Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
         pageBuilder: (_, __, ___) {
           return SSBottomSheet(
