@@ -12,6 +12,13 @@ class Service extends ChangeNotifier {
   List<Offset> positionsBig = [];
   List<GlobalKey> keys = [];
 
+  bool willPop = false;
+
+  set setWillPop(bool b) {
+    willPop = b;
+    notifyListeners();
+  }
+
   int selected = 0;
   int clickedIndex = 0;
 
