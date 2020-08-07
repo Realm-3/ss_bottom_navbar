@@ -82,7 +82,7 @@ SSBottomNav(
 
 ### SSBottomSheet
 
-<img src="https://github.com/NBK-Group/ss_bottom_navbar/blob/master/images/showcase-bottom-sheet.gif?raw=true" alt="SSBottomSheet Showcase Image" width="300" />
+<img src="https://github.com/NBK-Group/ss_bottom_navbar/blob/master/images/showcase-bottom-sheet.png?raw=true" alt="SSBottomSheet Showcase Image" width="300" />
 
 If you want to use `SSBottomNav`'s bottom sheet dialog, you can do that with `SSBottomSheet`
 ##### Usage
