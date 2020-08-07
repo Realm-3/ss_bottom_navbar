@@ -2,6 +2,7 @@ library ss_bottom_navbar;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ss_bottom_navbar/helper/empty_item.dart';
 import 'package:ss_bottom_navbar/service.dart';
 import 'package:ss_bottom_navbar/views/nav_item.dart';
 import 'package:ss_bottom_navbar/views/slide_box.dart';
@@ -49,23 +50,73 @@ class _SSBottomNavState extends State<SSBottomNav> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => Service(),
-      child: BottomNavBar(
-          items: widget.items,
-          iconSize: widget.iconSize,
-          backgroundColor: widget.backgroundColor,
-          color: widget.color,
-          selectedColor: widget.selectedColor,
-          unselectedColor: widget.unselectedColor,
-          onTabSelected: widget.onTabSelected,
-          shadow: widget.shadow,
-          selected: null,
-          isWidthFixed: false,
-          bottomSheetWidget: widget.bottomSheetWidget,
-          showBottomSheetAt: widget.showBottomSheetAt,
-          visible: widget.visible,
-          duration: widget.duration),
-    );
+        create: (_) => Service(),
+        child: _App(
+            items: widget.items,
+            iconSize: widget.iconSize,
+            backgroundColor: widget.backgroundColor,
+            color: widget.color,
+            selectedColor: widget.selectedColor,
+            unselectedColor: widget.unselectedColor,
+            onTabSelected: widget.onTabSelected,
+            shadow: widget.shadow,
+            bottomSheetWidget: widget.bottomSheetWidget,
+            showBottomSheetAt: widget.showBottomSheetAt,
+            visible: widget.visible,
+            duration: widget.duration));
+  }
+}
+
+class _App extends StatelessWidget {
+  final List<SSBottomNavItem> items;
+  final double iconSize;
+  final Color backgroundColor;
+  final Color color;
+  final Color selectedColor;
+  final Color unselectedColor;
+  final ValueChanged<int> onTabSelected;
+  final List<BoxShadow> shadow;
+  final bool visible;
+  final Widget bottomSheetWidget;
+  final int showBottomSheetAt;
+  final Duration duration;
+
+  _App({
+    @required this.items,
+    this.iconSize,
+    this.backgroundColor,
+    this.color,
+    this.selectedColor,
+    this.unselectedColor,
+    this.onTabSelected,
+    this.shadow,
+    this.bottomSheetWidget,
+    this.showBottomSheetAt = 0,
+    this.duration,
+    this.visible = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).padding;
+
+    return Container(
+        height: visible ? kBottomNavigationBarHeight + size.bottom : 0,
+        child: BottomNavBar(
+            items: items,
+            iconSize: iconSize,
+            backgroundColor: backgroundColor,
+            color: color,
+            selectedColor: selectedColor,
+            unselectedColor: unselectedColor,
+            onTabSelected: onTabSelected,
+            shadow: shadow,
+            selected: null,
+            isWidthFixed: false,
+            bottomSheetWidget: bottomSheetWidget,
+            showBottomSheetAt: showBottomSheetAt,
+            visible: visible,
+            duration: duration));
   }
 }
 
@@ -127,6 +178,23 @@ class _BottomNavBarState extends State<BottomNavBar> {
     _service.setSelected(index, didUpdateWidget: didUpdateWidget);
   }
 
+  _onPressed(Offset offset) async {
+    for (var pos in _service.positions) {
+      var index = _service.positions.indexOf(pos);
+      var rect1 = {'x': pos.dx, 'y': pos.dy, 'width': _service.sizes[index].dx, 'height': _service.sizes[index].dy};
+      var rect2 = {'x': offset.dx, 'y': offset.dy, 'width': 1, 'height': 1};
+
+      if (rect1['x'] < rect2['x'] + rect2['width'] &&
+          rect1['x'] + rect1['width'] > rect2['x'] &&
+          rect1['y'] < rect2['y'] + rect2['height'] &&
+          rect1['y'] + rect1['height'] > rect2['y']) {
+        Navigator.maybePop(context);
+        _service.clickedIndex = index;
+        _updateIndex(index);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _service = Provider.of<Service>(context, listen: false);
@@ -162,43 +230,47 @@ class _BottomNavBarState extends State<BottomNavBar> {
     }
 
     return Visibility(
+      key: ValueKey(1),
       visible: widget.visible,
       maintainState: true,
       maintainAnimation: true,
-      child: Container(
-        height: widget.visible ? kBottomNavigationBarHeight + size.bottom : 0,
-        color: Colors.white,
-        padding: EdgeInsets.only(bottom: size.bottom),
+      child: Material(
         child: Container(
-          height: kBottomNavigationBarHeight,
-          child: Stack(
-            children: [
-              Container(
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: _service.items.map((e) => _EmptyItem(e)).toList()),
-              ),
-              Container(
-                color: widget.backgroundColor ?? Colors.white,
-              ),
-              SlideBox(),
-              Container(
-                alignment: Alignment.center,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: _service.items
-                        .map((e) => NavItem(
-                              e,
-                              onTab: () {
-                                var index = _service.items.indexOf(e);
-                                print(widget.showBottomSheetAt);
-                                if (index == widget.showBottomSheetAt) SSBottomSheet.show(context: context, child: widget.bottomSheetWidget);
-                                _service.clickedIndex = index;
-                                if (_service.settings.selected == null) _service.setSelected(index);
-                                _updateIndex(index);
-                              },
-                            ))
-                        .toList()),
-              )
-            ],
+          color: Colors.white,
+          padding: EdgeInsets.only(bottom: size.bottom),
+          child: Container(
+            height: kBottomNavigationBarHeight,
+            child: Stack(
+              children: [
+                Container(
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: _service.items.map((e) => EmptyItem(e)).toList()),
+                ),
+                Container(
+                  color: widget.backgroundColor ?? Colors.white,
+                ),
+                SlideBox(),
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: _service.items
+                          .map((e) => NavItem(
+                                e,
+                                onTab: () {
+                                  var index = _service.items.indexOf(e);
+                                  print(widget.showBottomSheetAt);
+                                  print(index);
+                                  if (index == widget.showBottomSheetAt)
+                                    SSBottomSheet.show(context: context, child: widget.bottomSheetWidget, onPressed: _onPressed, service: _service);
+                                  _service.clickedIndex = index;
+                                  if (_service.settings.selected == null) _service.setSelected(index);
+                                  _updateIndex(index);
+                                },
+                              ))
+                          .toList()),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -216,103 +288,39 @@ class SSBottomNavItem {
   SSBottomNavItem({@required this.text, this.textStyle, @required this.iconData, this.iconSize = 16, this.isIconOnly = false});
 }
 
-class _EmptyItem extends StatefulWidget {
-  final SSBottomNavItem ssBottomNavItem;
-  final int selected;
-
-  _EmptyItem(this.ssBottomNavItem, {this.selected});
-
-  @override
-  _EmptyItemState createState() => _EmptyItemState();
-}
-
-class _EmptyItemState extends State<_EmptyItem> {
-  bool _isInit = false;
-  var _key = GlobalKey();
-
-  @override
-  Widget build(BuildContext context) {
-    var service = Provider.of<Service>(context);
-
-    var index = service.items.indexOf(widget.ssBottomNavItem);
-    var selected = service.emptySelectedIndex == index;
-
-    _postFrameCallback() async {
-      _isInit = true;
-
-      if (!selected) return;
-
-      try {
-        await Future.delayed(Duration(milliseconds: 200 + index * 12));
-
-        RenderBox box = _key.currentContext.findRenderObject();
-        Offset position = box.localToGlobal(Offset.zero);
-
-        service.positionsBig[service.emptySelectedIndex] = position;
-        service.sizesBig[service.emptySelectedIndex] = Offset(_key.currentContext.size.width, _key.currentContext.size.height);
-
-        service.setEmptySelectedIndex(index + 1);
-      } catch (e) {}
-    }
-
-    if (service.sizesBig[index] == Offset.zero &&
-        service.positionsBig[index] == Offset.zero &&
-        service.emptySelectedIndex <= service.items.length - 1) {
-      if (!_isInit) WidgetsBinding.instance.addPostFrameCallback((_) => _postFrameCallback());
-      if (selected) _postFrameCallback();
-    }
-
-    return Container(
-      margin: EdgeInsets.all(8),
-      key: _key,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            widget.ssBottomNavItem.iconData,
-            size: widget.ssBottomNavItem.iconSize ?? 16,
-          ),
-          if (selected && !widget.ssBottomNavItem.isIconOnly) ...[
-            SizedBox(
-              width: 5,
-            ),
-            Text(
-              widget.ssBottomNavItem.text,
-              style: widget.ssBottomNavItem.textStyle ?? TextStyle(),
-            ),
-          ]
-        ],
-      ),
-    );
-  }
-}
-
 class SSBottomSheet extends StatefulWidget {
   final Color backgroundColor;
   final Widget child;
+  final ValueChanged<Offset> onPressed;
 
-  SSBottomSheet({this.backgroundColor, this.child});
+  SSBottomSheet({Key key, this.backgroundColor, this.child, this.onPressed}) : super(key: key);
 
   @override
   _SSBottomSheetState createState() => _SSBottomSheetState();
 
-  static show({@required BuildContext context, @required child, backgroundColor = const Color(0xb3212121)}) {
-    Navigator.push(
-        context,
-        PageRouteBuilder(
-            pageBuilder: (_, __, ___) {
-              return SSBottomSheet(
-                child: child,
-                backgroundColor: backgroundColor,
-              );
-            },
-            opaque: false));
+  static show(
+      {@required BuildContext context, @required child, backgroundColor = const Color(0xb3212121), ValueChanged<Offset> onPressed, Service service}) {
+    Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
+        pageBuilder: (_, __, ___) {
+          return ChangeNotifierProvider.value(
+            value: service,
+            child: SSBottomSheet(
+              key: ValueKey(2),
+              child: child,
+              backgroundColor: backgroundColor,
+              onPressed: onPressed,
+            ),
+          );
+        },
+        opaque: false));
   }
 }
 
 class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProviderStateMixin {
   Animation<double> _animation;
   AnimationController _animationController;
+
+  bool willPop = true;
 
   final GlobalKey _childKey = GlobalKey();
 
@@ -331,7 +339,7 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
     _animation = Tween<double>(begin: 1, end: 0).animate(_animationController);
 
     _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.dismissed) Navigator.pop(context);
+      if (status == AnimationStatus.dismissed && willPop) _pop();
     });
     _animationController.forward();
   }
@@ -340,6 +348,10 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  void _pop() {
+    Navigator.pop(context);
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
@@ -363,23 +375,42 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
       _animationController.reverse();
   }
 
+  void onTapDown(BuildContext context, TapDownDetails details) {
+    if (_dismissUnderway) return;
+
+    var box = context.findRenderObject() as RenderBox;
+    var localOffset = box.globalToLocal(details.globalPosition);
+
+    widget.onPressed.call(Offset(localOffset.dx, localOffset.dy));
+  }
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context);
     var width = media.size.width;
     var bottomBarHeight = kBottomNavigationBarHeight + media.padding.bottom;
 
+    var service = Provider.of<Service>(context, listen: false);
+
+    if (service.willPop && willPop) {
+      willPop = false;
+      service.willPop = false;
+      service = Provider.of<Service>(context, listen: false);
+      _pop();
+    }
+
     return WillPopScope(
         onWillPop: onBackPressed,
         child: GestureDetector(
           onVerticalDragUpdate: _handleDragUpdate,
           onVerticalDragEnd: _handleDragEnd,
+          onTapDown: (TapDownDetails details) => onTapDown(context, details),
           child: Container(
-            margin: EdgeInsets.only(bottom: bottomBarHeight),
             child: Scaffold(
               backgroundColor: Colors.transparent,
               body: Container(
                 color: widget.backgroundColor,
+                margin: EdgeInsets.only(bottom: bottomBarHeight),
                 child: Column(
                   key: _childKey,
                   children: <Widget>[

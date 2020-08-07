@@ -33,7 +33,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
     var _selected = _index == service.selected;
     var _key = service.keys[_index];
 
-    var _textStyle = widget.ssBottomNavItem.textStyle ?? TextStyle();
+    var _textStyle = widget.ssBottomNavItem.textStyle ?? TextStyle(fontSize: 14);
 
     _isActive = service.selected == _index;
 
