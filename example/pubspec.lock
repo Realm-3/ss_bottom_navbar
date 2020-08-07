@@ -120,7 +120,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.5"
+    version: "0.0.7"
   stack_trace:
     dependency: transitive
     description:

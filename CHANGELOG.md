@@ -36,3 +36,10 @@
 ### Added
 
 -  Fixed issue #3
+
+## 0.0.7 - 2020-08-07
+
+### Added
+
+-  Added bottom sheet dialog
+-  Updated `README.md` for `SSBottomSheet`
