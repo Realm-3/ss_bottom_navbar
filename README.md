@@ -11,7 +11,7 @@ Flutter modern bottom nav bar. Compatible with Android & iOS. You can customize 
 
 ```yaml
 dependencies:
-  ss_bottom_navbar: 0.0.7
+  ss_bottom_navbar: 0.0.8
 ```
 
 ```bash
@@ -79,6 +79,7 @@ SSBottomNav(
 | `visible`| `bool`| visibilty of the `SSBottomNavItem` |
 | `bottomSheetWidget`| `Widget`| child of the bottom sheet dialog |
 | `showBottomSheetAt`| `int`| the index of `SSBottomNavItem` to show the `SSBottomNavItem` |
+| `bottomSheetHistory`| `bool`| default `true`. option to go back previous tab if `showBottomSheetAt` pressed while `SSBottomSheet` showing |
 
 ### SSBottomSheet
 
