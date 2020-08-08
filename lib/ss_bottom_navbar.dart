@@ -19,6 +19,7 @@ class SSBottomNav extends StatefulWidget {
   final bool visible;
   final Widget bottomSheetWidget;
   final int showBottomSheetAt;
+  final bool bottomSheetHistory;
 
 //  final int selected;
   final Duration duration;
@@ -39,6 +40,7 @@ class SSBottomNav extends StatefulWidget {
 //      this.selected,
     this.duration,
     this.visible = true,
+    this.bottomSheetHistory = true,
 //      this.isWidthFixed = false
   });
 
@@ -63,6 +65,7 @@ class _SSBottomNavState extends State<SSBottomNav> {
             bottomSheetWidget: widget.bottomSheetWidget,
             showBottomSheetAt: widget.showBottomSheetAt,
             visible: widget.visible,
+            bottomSheetHistory: widget.bottomSheetHistory,
             duration: widget.duration));
   }
 }
@@ -80,6 +83,7 @@ class _App extends StatelessWidget {
   final Widget bottomSheetWidget;
   final int showBottomSheetAt;
   final Duration duration;
+  final bool bottomSheetHistory;
 
   _App({
     @required this.items,
@@ -91,9 +95,10 @@ class _App extends StatelessWidget {
     this.onTabSelected,
     this.shadow,
     this.bottomSheetWidget,
-    this.showBottomSheetAt = 0,
+    this.showBottomSheetAt,
     this.duration,
-    this.visible = true,
+    this.visible,
+    this.bottomSheetHistory,
   });
 
   @override
@@ -116,6 +121,7 @@ class _App extends StatelessWidget {
             bottomSheetWidget: bottomSheetWidget,
             showBottomSheetAt: showBottomSheetAt,
             visible: visible,
+            bottomSheetHistory: bottomSheetHistory,
             duration: duration));
   }
 }
@@ -135,6 +141,7 @@ class BottomNavBar extends StatefulWidget {
   final bool visible;
   final Widget bottomSheetWidget;
   final int showBottomSheetAt;
+  final bool bottomSheetHistory;
 
   BottomNavBar(
       {@required this.items,
@@ -150,6 +157,7 @@ class BottomNavBar extends StatefulWidget {
       this.visible,
       this.bottomSheetWidget,
       this.showBottomSheetAt,
+      this.bottomSheetHistory,
       this.duration});
 
   @override
@@ -159,6 +167,7 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   var _isInit = false;
   int _index = 0;
+  int _tempIndex = 0;
   Service _service;
   bool _didUpdateWidget = false;
 
@@ -190,7 +199,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
           rect1['y'] + rect1['height'] > rect2['y']) {
         Navigator.maybePop(context);
         _service.clickedIndex = index;
-        _updateIndex(index);
+
+        var condition = index == widget.showBottomSheetAt && widget.bottomSheetHistory;
+
+        _updateIndex(condition ? _tempIndex : index);
+        if (condition) _service.clickedIndex = _tempIndex;
       }
     }
   }
@@ -217,7 +230,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
       if (!_isInit)
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          await Future.delayed(Duration(milliseconds: 200));
+          await Future.delayed(Duration(milliseconds: 50));
 
           _service.setSelected(0);
           _isInit = true;
@@ -258,11 +271,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                 e,
                                 onTab: () {
                                   var index = _service.items.indexOf(e);
-                                  print(widget.showBottomSheetAt);
-                                  print(index);
+
                                   if (index == widget.showBottomSheetAt)
                                     SSBottomSheet.show(context: context, child: widget.bottomSheetWidget, onPressed: _onPressed);
+                                  else
+                                    _tempIndex = index;
+
                                   _service.clickedIndex = index;
+
                                   if (_service.settings.selected == null) _service.setSelected(index);
                                   _updateIndex(index);
                                 },
@@ -434,8 +450,8 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
         ));
   }
 
-  Future<bool> onBackPressed() {
+  Future<bool> onBackPressed() async {
     _animationController.reverse();
-    return Future<bool>.value(false);
+    return false;
   }
 }

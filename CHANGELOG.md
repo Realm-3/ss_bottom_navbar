@@ -43,3 +43,9 @@
 
 -  Added bottom sheet dialog
 -  Updated `README.md` for `SSBottomSheet`
+
+## 0.0.8 - 2020-08-08
+
+### Added
+
+-  Added option to go back previous tab if `showBottomSheetAt` pressed while `SSBottomSheet` showing
