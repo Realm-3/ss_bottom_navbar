@@ -1,4 +1,5 @@
 
+
 # [ss_bottom_navbar](https://pub.dev/packages/ss_bottom_navbar)
 
 ![Publish to Pub.dev](https://github.com/NBK-Group/ss_bottom_navbar/workflows/Publish%20to%20Pub.dev/badge.svg)
@@ -44,10 +45,10 @@ SSBottomNav(
   selectedColor: Colors.white,
   unselectedColor: Colors.black,
   onTabSelected: (index) {
-	  print(index);
-	  setState(() {
-		  _index = index;
-	 });
+     print(index);
+     setState(() {
+        _index = index;
+    });
   }
 ),
 ```
@@ -80,6 +81,7 @@ SSBottomNav(
 | `bottomSheetWidget`| `Widget`| child of the bottom sheet dialog |
 | `showBottomSheetAt`| `int`| the index of `SSBottomNavItem` to show the `SSBottomNavItem` |
 | `bottomSheetHistory`| `bool`| default `true`. option to go back previous tab if `showBottomSheetAt` pressed while `SSBottomSheet` showing |
+| `dismissedByAnimation`| `ValueChanged<bool>`| function that returns true if `SSBottomSheet` dismissed by animation |
 
 ### SSBottomSheet
 
@@ -88,9 +90,9 @@ SSBottomNav(
 If you want to use `SSBottomNav`'s bottom sheet dialog, you can do that with `SSBottomSheet`
 ##### Usage
 ```dart
-SSBottomSheet.show(  
-  context: context,  
-  child: bottomSheet(),  
+SSBottomSheet.show(
+  context: context,
+  child: bottomSheet(),
   onPressed: (offset) {}
 );
 ```
