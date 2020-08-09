@@ -208,6 +208,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
     }
   }
 
+  _dismissedByAnimation(bool condition) {
+    if (condition) {
+      if (!widget.bottomSheetHistory) return;
+
+      _updateIndex(_tempIndex);
+      _service.clickedIndex = _tempIndex;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _service = Provider.of<Service>(context, listen: false);
@@ -273,7 +282,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                   var index = _service.items.indexOf(e);
 
                                   if (index == widget.showBottomSheetAt)
-                                    SSBottomSheet.show(context: context, child: widget.bottomSheetWidget, onPressed: _onPressed);
+                                    SSBottomSheet.show(
+                                        context: context,
+                                        child: widget.bottomSheetWidget,
+                                        onPressed: _onPressed,
+                                        dismissedByAnimation: _dismissedByAnimation);
                                   else
                                     _tempIndex = index;
 
@@ -309,8 +322,9 @@ class SSBottomSheet extends StatefulWidget {
   final Widget child;
   final ValueChanged<Offset> onPressed;
   final double bottomMargin;
+  final ValueChanged<bool> dismissedByAnimation;
 
-  SSBottomSheet({Key key, this.backgroundColor, this.child, this.onPressed, this.bottomMargin}) : super(key: key);
+  SSBottomSheet({Key key, this.backgroundColor, this.child, this.onPressed, this.bottomMargin, this.dismissedByAnimation}) : super(key: key);
 
   @override
   _SSBottomSheetState createState() => _SSBottomSheetState();
@@ -320,15 +334,16 @@ class SSBottomSheet extends StatefulWidget {
       @required child,
       backgroundColor = const Color(0xb3212121),
       double bottomMargin,
+      ValueChanged<bool> dismissedByAnimation,
       ValueChanged<Offset> onPressed}) {
     Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
         pageBuilder: (_, __, ___) {
           return SSBottomSheet(
-            child: child,
-            backgroundColor: backgroundColor,
-            onPressed: onPressed,
-            bottomMargin: bottomMargin,
-          );
+              child: child,
+              backgroundColor: backgroundColor,
+              onPressed: onPressed,
+              bottomMargin: bottomMargin,
+              dismissedByAnimation: dismissedByAnimation);
         },
         opaque: false));
   }
@@ -337,8 +352,6 @@ class SSBottomSheet extends StatefulWidget {
 class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProviderStateMixin {
   Animation<double> _animation;
   AnimationController _animationController;
-
-  bool willPop = true;
 
   final GlobalKey _childKey = GlobalKey();
 
@@ -357,7 +370,10 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
     _animation = Tween<double>(begin: 1, end: 0).animate(_animationController);
 
     _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.dismissed && willPop) _pop();
+      if (status == AnimationStatus.dismissed) {
+        _pop();
+        widget.dismissedByAnimation.call(true);
+      }
     });
     _animationController.forward();
   }
