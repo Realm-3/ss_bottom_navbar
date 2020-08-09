@@ -49,3 +49,9 @@
 ### Added
 
 -  Added option to go back previous tab if `showBottomSheetAt` pressed while `SSBottomSheet` showing
+
+## 0.0.9 - 2020-08-09
+
+### Added
+
+-  Fixed `SSBottomNavItem` dismiss by animation, issue #19
