@@ -57,7 +57,7 @@ class EmptyItemState extends State<EmptyItem> {
         children: [
           Icon(
             widget.ssBottomNavItem.iconData,
-            size: widget.ssBottomNavItem.iconSize ?? 16,
+            size: widget.ssBottomNavItem.iconSize ?? service.settings.iconSize ?? 16,
           ),
           if (selected && !widget.ssBottomNavItem.isIconOnly) ...[
             SizedBox(

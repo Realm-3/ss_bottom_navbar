@@ -71,7 +71,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
                 Icon(
                   widget.ssBottomNavItem.iconData,
                   color: _isActive ? service.settings.selectedColor : service.settings.unselectedColor,
-                  size: widget.ssBottomNavItem.iconSize ?? 16,
+                  size: widget.ssBottomNavItem.iconSize ?? service.settings.iconSize ?? 16,
                 ),
                 AnimatedSize(
                   curve: Curves.easeOutExpo,
