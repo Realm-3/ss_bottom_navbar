@@ -55,3 +55,9 @@
 ### Added
 
 -  Fixed `SSBottomNavItem` dismiss by animation, issue #19
+
+## 0.0.10 - 2020-08-15
+
+### Added
+
+-  Fixed general icon size issue
