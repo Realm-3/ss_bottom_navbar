@@ -237,13 +237,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
               visible: widget.visible,
               duration: widget.duration));
 
-      if (!_isInit)
+      if (!_isInit) {
+        _isInit = true;
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          await Future.delayed(Duration(milliseconds: 50));
+          await Future.delayed(Duration(milliseconds: 200));
 
           _service.setSelected(0);
-          _isInit = true;
         });
+      }
     }
 
     if (_didUpdateWidget) {

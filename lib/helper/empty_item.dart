@@ -25,8 +25,6 @@ class EmptyItemState extends State<EmptyItem> {
     var selected = service.emptySelectedIndex == index;
 
     _postFrameCallback() async {
-      _isInit = true;
-
       if (!selected) return;
 
       try {
@@ -45,7 +43,12 @@ class EmptyItemState extends State<EmptyItem> {
     if (service.sizesBig[index] == Offset.zero &&
         service.positionsBig[index] == Offset.zero &&
         service.emptySelectedIndex <= service.items.length - 1) {
-      if (!_isInit) WidgetsBinding.instance.addPostFrameCallback((_) => _postFrameCallback());
+
+      if (!_isInit) {
+        _isInit = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) => _postFrameCallback());
+      }
+
       if (selected) _postFrameCallback();
     }
 
