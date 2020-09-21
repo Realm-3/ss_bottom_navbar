@@ -41,9 +41,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
       RenderBox renderBoxRed = _key.currentContext.findRenderObject();
       var positionRed = renderBoxRed.localToGlobal(Offset.zero);
 
-      setState(() {
-        _isInit = true;
-      });
+      _isInit = true;
 
       service.setSizeAndPosition(
           index: _index,

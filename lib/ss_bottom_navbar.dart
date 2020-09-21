@@ -7,6 +7,8 @@ import 'package:ss_bottom_navbar/service.dart';
 import 'package:ss_bottom_navbar/views/nav_item.dart';
 import 'package:ss_bottom_navbar/views/slide_box.dart';
 
+Service ssBottomBarService = Service();
+
 class SSBottomNav extends StatefulWidget {
   final List<SSBottomNavItem> items;
   final double iconSize;
@@ -52,7 +54,7 @@ class _SSBottomNavState extends State<SSBottomNav> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => Service(),
+        create: (_) => ssBottomBarService,
         child: _App(
             items: widget.items,
             iconSize: widget.iconSize,
