@@ -5,12 +5,12 @@ import 'package:ss_bottom_navbar/ss_bottom_navbar.dart';
 
 class Service extends ChangeNotifier {
   SSBottomNavBarSettings settings;
-  List<SSBottomNavItem> items = [];
-  List<Offset> sizes = [];
-  List<Offset> sizesBig = [];
-  List<Offset> positions = [];
-  List<Offset> positionsBig = [];
-  List<GlobalKey> keys = [];
+  List<SSBottomNavItem> items = List(5);
+  List<Offset> sizes = List(5);
+  List<Offset> sizesBig = List(5);
+  List<Offset> positions = List(5);
+  List<Offset> positionsBig = List(5);
+  List<GlobalKey> keys = List(5);
 
   bool willPop = false;
 
@@ -29,10 +29,6 @@ class Service extends ChangeNotifier {
   init(List<SSBottomNavItem> items, {SSBottomNavBarSettings settings}) {
     this.settings = settings;
     this.items = items;
-    sizes = this.items.map((e) => Offset.zero).toList();
-    sizesBig = this.items.map((e) => Offset.zero).toList();
-    positions = this.items.map((e) => Offset.zero).toList();
-    positionsBig = this.items.map((e) => Offset.zero).toList();
     keys = this.items.map((e) => GlobalKey()).toList();
   }
 
