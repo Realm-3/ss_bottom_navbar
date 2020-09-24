@@ -32,6 +32,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
     var _index = service.items.indexOf(widget.ssBottomNavItem);
     var _selected = _index == service.selected;
     var _key = service.keys[_index];
+    var size = MediaQuery.of(context).size;
 
     var _textStyle = widget.ssBottomNavItem.textStyle ?? TextStyle(fontSize: 14);
 
@@ -63,7 +64,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
           duration: service.animationDuration,
           curve: Curves.easeOutExpo,
           child: Container(
-            margin: EdgeInsets.all(8),
+            margin: EdgeInsets.all(size.height*0.01),
             key: _key,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -71,8 +72,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
                 Icon(
                   widget.ssBottomNavItem.iconData,
                   color: _isActive ? service.settings.selectedColor : service.settings.unselectedColor,
-                  size: widget.ssBottomNavItem.iconSize ?? service.settings.iconSize ?? 16,
-                ),
+ size: widget.ssBottomNavItem.iconSize ?? service.settings.iconSize ?? 4,                ),
                 AnimatedSize(
                   curve: Curves.easeOutExpo,
                   vsync: this,
@@ -83,7 +83,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(
-                          width: 5,
+                          width: size.width*0.02,
                         ),
                         Text(
                           widget.ssBottomNavItem.text,
