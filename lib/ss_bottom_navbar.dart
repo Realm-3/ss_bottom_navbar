@@ -219,7 +219,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    _service = Provider.of<Service>(context, listen: false);
+    _service = Provider.of<Service>(context, );
     var size = MediaQuery.of(context).padding;
 
     if (_service.items.isEmpty) {
