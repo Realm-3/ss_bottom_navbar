@@ -281,22 +281,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                 onTab: () {
                                   var index = _service.items.indexOf(e);
 
-                                  if (index == widget.showBottomSheetAt)
-                                    SSBottomSheet.show(
-                                        context: context,
-                                        child: widget.bottomSheetWidget,
-                                        onPressed: _onPressed,
-                                        dismissedByAnimation: _dismissedByAnimation);
-                                  else
-                                    _tempIndex = index;
+                                if (index == widget.showBottomSheetAt)
+                                  SSBottomSheet.show(
+                                      context: context,
+                                      child: widget.bottomSheetWidget,
+                                      onPressed: _onPressed,
+                                      dismissedByAnimation: _dismissedByAnimation);
+                                else
+                                  _tempIndex = index;
 
-                                  _service.clickedIndex = index;
+                                _service.clickedIndex = index;
 
-                                  if (_service.settings.selected == null) _service.setSelected(index);
-                                  _updateIndex(index);
-                                },
-                              ))
-                          .toList()),
+                                if (_service.settings.selected == null) _service.setSelected(index);
+                                _updateIndex(index);
+                              },
+                            ))
+                                .toList()),
+                      )
+                    ],
+                  ),
                 )
               ],
             ),

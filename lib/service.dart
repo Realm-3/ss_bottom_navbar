@@ -45,6 +45,7 @@ class Service extends ChangeNotifier {
   setEmptySelectedIndex(int index) {
     emptySelectedIndex = index;
     notifyListeners();
+    return index;
   }
 
   setSelected(int index, {bool didUpdateWidget = false}) async {
