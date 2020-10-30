@@ -84,7 +84,6 @@ class _AppState extends State<App> {
         bottomSheetWidget: _bottomSheet(),
         showBottomSheetAt: 2,
         onTabSelected: (index) {
-          print(index);
           setState(() {
             _index = index;
           });

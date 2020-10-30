@@ -145,20 +145,20 @@ class BottomNavBar extends StatefulWidget {
 
   BottomNavBar(
       {@required this.items,
-      this.iconSize,
-      this.backgroundColor,
-      this.color,
-      this.selectedColor,
-      this.unselectedColor,
-      this.onTabSelected,
-      this.shadow,
-      this.selected,
-      this.isWidthFixed,
-      this.visible,
-      this.bottomSheetWidget,
-      this.showBottomSheetAt,
-      this.bottomSheetHistory,
-      this.duration});
+        this.iconSize,
+        this.backgroundColor,
+        this.color,
+        this.selectedColor,
+        this.unselectedColor,
+        this.onTabSelected,
+        this.shadow,
+        this.selected,
+        this.isWidthFixed,
+        this.visible,
+        this.bottomSheetWidget,
+        this.showBottomSheetAt,
+        this.bottomSheetHistory,
+        this.duration});
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
@@ -199,11 +199,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
           rect1['y'] + rect1['height'] > rect2['y']) {
         Navigator.maybePop(context);
         _service.clickedIndex = index;
-
         var condition = index == widget.showBottomSheetAt && widget.bottomSheetHistory;
-
-        _updateIndex(condition ? _tempIndex : index);
-        if (condition) _service.clickedIndex = _tempIndex;
+        setState(() {
+          _tempIndex=index;
+        });
+        _updateIndex(index);
+        _service.clickedIndex = _tempIndex;
       }
     }
   }
@@ -277,25 +278,29 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: _service.items
                           .map((e) => NavItem(
-                                e,
-                                onTab: () {
-                                  var index = _service.items.indexOf(e);
+                        e,
+                        onTab: () {
+                          var index = _service.items.indexOf(e);
+                          if (index == widget.showBottomSheetAt) {
+                            SSBottomSheet.show(
+                                context: context,
+                                child: widget.bottomSheetWidget,
+                                onPressed: _onPressed,
+                                dismissedByAnimation: _dismissedByAnimation);
+                          }
+                          else
+                          {
+                            _tempIndex = index;
 
-                                  if (index == widget.showBottomSheetAt)
-                                    SSBottomSheet.show(
-                                        context: context,
-                                        child: widget.bottomSheetWidget,
-                                        onPressed: _onPressed,
-                                        dismissedByAnimation: _dismissedByAnimation);
-                                  else
-                                    _tempIndex = index;
+                          }
+                          _service.clickedIndex = index;
 
-                                  _service.clickedIndex = index;
-
-                                  if (_service.settings.selected == null) _service.setSelected(index);
-                                  _updateIndex(index);
-                                },
-                              ))
+                          if (_service.settings.selected == null) {
+                            _service.setSelected(index);
+                          }
+                          _updateIndex(index);
+                        },
+                      ))
                           .toList()),
                 )
               ],
@@ -331,11 +336,11 @@ class SSBottomSheet extends StatefulWidget {
 
   static show(
       {@required BuildContext context,
-      @required child,
-      backgroundColor = const Color(0xb3212121),
-      double bottomMargin,
-      ValueChanged<bool> dismissedByAnimation,
-      ValueChanged<Offset> onPressed}) {
+        @required child,
+        backgroundColor = const Color(0xb3212121),
+        double bottomMargin,
+        ValueChanged<bool> dismissedByAnimation,
+        ValueChanged<Offset> onPressed}) {
     Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
         pageBuilder: (_, __, ___) {
           return SSBottomSheet(
@@ -367,6 +372,7 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
     super.initState();
 
     _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+
     _animation = Tween<double>(begin: 1, end: 0).animate(_animationController);
 
     _animationController.addStatusListener((status) {
