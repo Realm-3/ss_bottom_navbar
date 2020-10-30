@@ -103,15 +103,15 @@ class SSBottomNavBarSettings {
 
   SSBottomNavBarSettings(
       {this.items,
-      this.iconSize,
-      this.backgroundColor,
-      this.color,
-      this.selectedColor,
-      this.unselectedColor,
-      this.onTabSelected,
-      this.shadow,
-      this.selected,
-      this.isWidthFixed,
-      this.visible,
-      this.duration});
+        this.iconSize,
+        this.backgroundColor,
+        this.color,
+        this.selectedColor,
+        this.unselectedColor,
+        this.onTabSelected,
+        this.shadow,
+        this.selected,
+        this.isWidthFixed,
+        this.visible,
+        this.duration});
 }
