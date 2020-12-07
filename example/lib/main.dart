@@ -22,6 +22,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   int _index = 0;
+  int _selected = 0;
   bool _isVisible = true;
 
   var _colors = [Colors.red, Colors.blue, Colors.green, Colors.orange, Colors.teal];
@@ -71,7 +72,8 @@ class _AppState extends State<App> {
         child: Icon(_isVisible ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
         onPressed: () {
           setState(() {
-            _isVisible = !_isVisible;
+            // _isVisible = !_isVisible;
+            _selected = 3;
           });
         },
       ),
@@ -83,10 +85,12 @@ class _AppState extends State<App> {
         visible: _isVisible,
         bottomSheetWidget: _bottomSheet(),
         showBottomSheetAt: 2,
+        selected: _selected,
         onTabSelected: (index) {
           print(index);
           setState(() {
             _index = index;
+            _selected = index;
           });
         },
       ),

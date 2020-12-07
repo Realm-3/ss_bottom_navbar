@@ -67,3 +67,9 @@
 ### Added
 
 -  Can select the selected item
+
+## 0.0.10+2 - 2020-12-07
+
+### Added
+
+-  added selected field to animate from outside of the package

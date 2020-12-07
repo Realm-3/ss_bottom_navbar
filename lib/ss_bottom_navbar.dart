@@ -21,7 +21,7 @@ class SSBottomNav extends StatefulWidget {
   final int showBottomSheetAt;
   final bool bottomSheetHistory;
 
-//  final int selected;
+  final int selected;
   final Duration duration;
 
 //  final bool isWidthFixed;
@@ -37,7 +37,7 @@ class SSBottomNav extends StatefulWidget {
     this.shadow,
     this.bottomSheetWidget,
     this.showBottomSheetAt = 0,
-//      this.selected,
+    this.selected,
     this.duration,
     this.visible = true,
     this.bottomSheetHistory = true,
@@ -62,6 +62,7 @@ class _SSBottomNavState extends State<SSBottomNav> {
             unselectedColor: widget.unselectedColor,
             onTabSelected: widget.onTabSelected,
             shadow: widget.shadow,
+            selected: widget.selected,
             bottomSheetWidget: widget.bottomSheetWidget,
             showBottomSheetAt: widget.showBottomSheetAt,
             visible: widget.visible,
@@ -84,6 +85,7 @@ class _App extends StatelessWidget {
   final int showBottomSheetAt;
   final Duration duration;
   final bool bottomSheetHistory;
+  final int selected;
 
   _App({
     @required this.items,
@@ -97,6 +99,7 @@ class _App extends StatelessWidget {
     this.bottomSheetWidget,
     this.showBottomSheetAt,
     this.duration,
+    this.selected,
     this.visible,
     this.bottomSheetHistory,
   });
@@ -116,7 +119,7 @@ class _App extends StatelessWidget {
             unselectedColor: unselectedColor,
             onTabSelected: onTabSelected,
             shadow: shadow,
-            selected: null,
+            selected: selected,
             isWidthFixed: false,
             bottomSheetWidget: bottomSheetWidget,
             showBottomSheetAt: showBottomSheetAt,
@@ -168,6 +171,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   var _isInit = false;
   int _index = 0;
   int _tempIndex = 0;
+  int _tempSelected;
   Service _service;
   bool _didUpdateWidget = false;
 
@@ -177,6 +181,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
     if (_service.clickedIndex < _service.items.length) _service.selected = _service.clickedIndex;
     if (_service.clickedIndex != _service.selected) _didUpdateWidget = true;
+
+    print('didUpdateWidget');
+    print(widget.selected);
+
+    if (_index != widget.selected && widget.selected != null) {
+      _tempSelected = widget.selected;
+      print('in if');
+      _index = widget.selected;
+      _service.setSelected(_index);
+    }
   }
 
   _updateIndex(int index, {bool didUpdateWidget = false}) async {
