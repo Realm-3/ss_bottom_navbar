@@ -61,3 +61,9 @@
 ### Added
 
 -  Fixed general icon size issue
+
+## 0.0.10+1 - 2020-12-07
+
+### Added
+
+-  Can select the selected item
