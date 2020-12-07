@@ -40,27 +40,27 @@ class _AppState extends State<App> {
     _buildPages() => _colors.map((color) => _page(color)).toList();
 
     _bottomSheet() => Container(
-      color: Colors.white,
-      child: Column(
-        children: [
-          ListTile(
-            leading: Icon(Icons.camera_alt),
-            title: Text('Use Camera'),
+          color: Colors.white,
+          child: Column(
+            children: [
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Use Camera'),
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Choose from Gallery'),
+              ),
+              ListTile(
+                leading: Icon(Icons.edit),
+                title: Text('Write a Story'),
+                onTap: () {
+                  Navigator.maybePop(context);
+                },
+              ),
+            ],
           ),
-          ListTile(
-            leading: Icon(Icons.photo_library),
-            title: Text('Choose from Gallery'),
-          ),
-          ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Write a Story'),
-            onTap: () {
-              Navigator.maybePop(context);
-            },
-          ),
-        ],
-      ),
-    );
+        );
 
     return Scaffold(
       body: IndexedStack(

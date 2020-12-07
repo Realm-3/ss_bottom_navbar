@@ -180,7 +180,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   _updateIndex(int index, {bool didUpdateWidget = false}) async {
-    if (widget.onTabSelected != null && _index != index) widget.onTabSelected.call(index);
+    widget.onTabSelected.call(index);
 
     _index = index;
     _service.settings.selected = _index;
