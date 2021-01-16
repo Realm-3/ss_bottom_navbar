@@ -161,17 +161,19 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  var _isInit = false;
-  int _tempIndex = 0;
-  // int _tempSelected;
   SSBottomBarState _service;
+  bool _isInit = false;
+  int _tempIndex = 0;
   bool _didUpdateWidget = false;
+  bool _isDismissedByAnimation;
 
   _onPressed(Offset offset) async {
+    _isDismissedByAnimation = true;
+
     for (var pos in _service.positions) {
-      var index = _service.positions.indexOf(pos);
-      var rect1 = {'x': pos.dx, 'y': pos.dy, 'width': _service.sizes[index].dx, 'height': _service.sizes[index].dy};
-      var rect2 = {'x': offset.dx, 'y': offset.dy, 'width': 1, 'height': 1};
+      final index = _service.positions.indexOf(pos);
+      final rect1 = {'x': pos.dx, 'y': pos.dy, 'width': _service.sizes[index].dx, 'height': _service.sizes[index].dy};
+      final rect2 = {'x': offset.dx, 'y': offset.dy, 'width': 1, 'height': 1};
 
       if (rect1['x'] < rect2['x'] + rect2['width'] &&
           rect1['x'] + rect1['width'] > rect2['x'] &&
@@ -180,16 +182,18 @@ class _BottomNavBarState extends State<BottomNavBar> {
         Navigator.maybePop(context);
         _service.clickedIndex = index;
 
-        var condition = index == widget.showBottomSheetAt && widget.bottomSheetHistory;
+        final condition = index == widget.showBottomSheetAt && widget.bottomSheetHistory;
 
         _service.setSelected(condition ? _tempIndex : index);
+        _isDismissedByAnimation = false;
         if (condition) _service.clickedIndex = _tempIndex;
       }
     }
   }
 
   _dismissedByAnimation(bool condition) {
-    if (condition) {
+    print('asdas $condition');
+    if (condition && _isDismissedByAnimation) {
       if (!widget.bottomSheetHistory) return;
 
       _service.setSelected(_tempIndex);
@@ -200,7 +204,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     _service = Provider.of<SSBottomBarState>(context, listen: false);
-    var size = MediaQuery.of(context).padding;
+    final size = MediaQuery.of(context).padding;
 
     if (_service.items.isEmpty) {
       _service.init(widget.items,
@@ -260,17 +264,23 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                 onTab: () {
                                   var index = _service.items.indexOf(e);
 
-                                  if (index == widget.showBottomSheetAt)
+                                  print(index == widget.showBottomSheetAt);
+
+                                  if (index == widget.showBottomSheetAt) {
+                                    _service.clickedIndex = index;
+                                    _service.setSelected(index);
+
                                     SSBottomSheet.show(
                                         context: context,
                                         child: widget.bottomSheetWidget,
                                         onPressed: _onPressed,
                                         dismissedByAnimation: _dismissedByAnimation);
-                                  else
+                                  } else {
                                     _tempIndex = index;
 
-                                  _service.clickedIndex = index;
-                                  _service.setSelected(index);
+                                    _service.clickedIndex = index;
+                                    _service.setSelected(index);
+                                  }
                                 },
                               ))
                           .toList()),
@@ -368,7 +378,7 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
   void _handleDragUpdate(DragUpdateDetails details) {
     if (_dismissUnderway) return;
 
-    var change = details.primaryDelta / (_childHeight ?? details.primaryDelta);
+    final change = details.primaryDelta / (_childHeight ?? details.primaryDelta);
     _animationController.value -= change;
   }
 
@@ -389,17 +399,17 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
   void onTapDown(BuildContext context, TapDownDetails details) {
     if (_dismissUnderway) return;
 
-    var box = context.findRenderObject() as RenderBox;
-    var localOffset = box.globalToLocal(details.globalPosition);
+    final box = context.findRenderObject() as RenderBox;
+    final localOffset = box.globalToLocal(details.globalPosition);
 
     widget.onPressed.call(Offset(localOffset.dx, localOffset.dy));
   }
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context);
-    var width = media.size.width;
-    var bottomBarHeight = widget.bottomMargin ?? kBottomNavigationBarHeight + media.padding.bottom;
+    final media = MediaQuery.of(context);
+    final width = media.size.width;
+    final bottomBarHeight = widget.bottomMargin ?? kBottomNavigationBarHeight + media.padding.bottom;
 
     return WillPopScope(
         onWillPop: onBackPressed,
