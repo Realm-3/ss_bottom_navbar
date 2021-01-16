@@ -22,12 +22,11 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  SSBottomBarState _state;
   bool _isVisible = true;
 
-  SSBottomBarState _state;
-
-  var _colors = [Colors.red, Colors.blue, Colors.green, Colors.orange, Colors.teal];
-  var items = [
+  final _colors = [Colors.red, Colors.blue, Colors.green, Colors.orange, Colors.teal];
+  final items = [
     SSBottomNavItem(text: 'Home', iconData: Icons.home),
     SSBottomNavItem(text: 'Store', iconData: Icons.store),
     SSBottomNavItem(text: 'Add', iconData: Icons.add, isIconOnly: true),
