@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ss_bottom_navbar/service.dart';
-import 'package:ss_bottom_navbar/ss_bottom_navbar.dart';
+import 'package:ss_bottom_navbar/src/service.dart';
+import 'package:ss_bottom_navbar/src/ss_bottom_navbar.dart';
 
 class EmptyItem extends StatefulWidget {
   final SSBottomNavItem ssBottomNavItem;
@@ -19,7 +19,7 @@ class EmptyItemState extends State<EmptyItem> {
 
   @override
   Widget build(BuildContext context) {
-    var service = Provider.of<Service>(context);
+    var service = Provider.of<SSBottomBarState>(context);
 
     var index = service.items.indexOf(widget.ssBottomNavItem);
     var selected = service.emptySelectedIndex == index;

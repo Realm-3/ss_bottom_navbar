@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ss_bottom_navbar/ss_bottom_navbar.dart';
+import 'package:ss_bottom_navbar/src/ss_bottom_navbar.dart';
 
 import '../service.dart';
 
@@ -28,7 +28,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var service = Provider.of<Service>(context);
+    var service = Provider.of<SSBottomBarState>(context);
     var _index = service.items.indexOf(widget.ssBottomNavItem);
     var _selected = _index == service.selected;
     var _key = service.keys[_index];
@@ -45,10 +45,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
         _isInit = true;
       });
 
-      service.setSizeAndPosition(
-          index: _index,
-          size: Offset(_key.currentContext.size.width, _key.currentContext.size.height),
-          position: positionRed);
+      service.setSizeAndPosition(index: _index, size: Offset(_key.currentContext.size.width, _key.currentContext.size.height), position: positionRed);
     }
 
     if (!_isInit) WidgetsBinding.instance.addPostFrameCallback((_) => _postFrameCallback());
@@ -58,8 +55,14 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
       child: InkWell(
         onTap: widget.onTab,
         child: AnimatedPadding(
-          padding: EdgeInsets.only(left: service.items[service.selected].isIconOnly ? 0 : _selected ? service.settings.isWidthFixed
-              ? (service.sizesBig.reduce((curr, next) => curr.dx > next.dx ? curr : next).dx - service.sizesBig[service.selected].dx) : 0 : 0),
+          padding: EdgeInsets.only(
+              left: service.items[service.selected].isIconOnly
+                  ? 0
+                  : _selected
+                      ? service.settings.isWidthFixed
+                          ? (service.sizesBig.reduce((curr, next) => curr.dx > next.dx ? curr : next).dx - service.sizesBig[service.selected].dx)
+                          : 0
+                      : 0),
           duration: service.animationDuration,
           curve: Curves.easeOutExpo,
           child: Container(
@@ -78,7 +81,13 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
                   vsync: this,
                   duration: service.animationDuration,
                   child: Container(
-                    width: widget.ssBottomNavItem.isIconOnly ? 0 : service.state == SSBottomNavBarState.icon ? 0 : _isActive ? null : 0,
+                    width: widget.ssBottomNavItem.isIconOnly
+                        ? 0
+                        : service.state == SSBottomNavBarState.icon
+                            ? 0
+                            : _isActive
+                                ? null
+                                : 0,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

@@ -13,7 +13,7 @@ class _SlideBoxState extends State<SlideBox> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var _service = Provider.of<Service>(context);
+    var _service = Provider.of<SSBottomBarState>(context);
 
     var _sizeFactor = 4;
     var _topPadding = (kBottomNavigationBarHeight - _height) / 2;
@@ -22,7 +22,9 @@ class _SlideBoxState extends State<SlideBox> with TickerProviderStateMixin {
         ? _service.sizes[_service.selected].dx
         : _service.settings.isWidthFixed
             ? _service.sizesBig.reduce((curr, next) => curr.dx > next.dx ? curr : next).dx
-            : _service.state == SSBottomNavBarState.text ? _service.sizesBig[_service.selected].dx : _service.sizes[_service.selected].dx;
+            : _service.state == SSBottomNavBarState.text
+                ? _service.sizesBig[_service.selected].dx
+                : _service.sizes[_service.selected].dx;
     var _posX = _service.state == SSBottomNavBarState.text ? _service.positionsBig[_service.selected].dx : _service.positions[_service.selected].dx;
 
     var _width = _sizeX + _sizeFactor * 2;

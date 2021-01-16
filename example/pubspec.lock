@@ -96,7 +96,7 @@ packages:
     source: hosted
     version: "1.8.0-nullsafety.3"
   provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: provider
       url: "https://pub.dartlang.org"
@@ -120,7 +120,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.10+2"
+    version: "0.1.0"
   stack_trace:
     dependency: transitive
     description:
