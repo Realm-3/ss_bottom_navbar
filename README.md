@@ -20,7 +20,7 @@ $  flutter pub get
 ```
 
 ```dart
-import 'package:ss_bottom_navbar/ss_bottom_navbar.dart';
+import 'package:ss_bottom_navbar/src/ss_bottom_navbar.dart';
 ```
 
 ## Example

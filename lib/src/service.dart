@@ -1,9 +1,11 @@
+library ss_bottom_navbar;
+
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:ss_bottom_navbar/ss_bottom_navbar.dart';
+import 'package:ss_bottom_navbar/src/ss_bottom_navbar.dart';
 
-class Service extends ChangeNotifier {
+class SSBottomBarState extends ChangeNotifier {
   SSBottomNavBarSettings settings;
   List<SSBottomNavItem> items = [];
   List<Offset> sizes = [];
@@ -48,6 +50,9 @@ class Service extends ChangeNotifier {
   }
 
   setSelected(int index, {bool didUpdateWidget = false}) async {
+    selected = index;
+    notifyListeners();
+
 //    TODO: FEATURE
 //    state = SSBottomNavBarState.icon;
 //    notifyListeners();
@@ -94,9 +99,7 @@ class SSBottomNavBarSettings {
   Color color;
   Color selectedColor;
   Color unselectedColor;
-  ValueChanged<int> onTabSelected;
   List<BoxShadow> shadow;
-  int selected;
   bool isWidthFixed;
   Duration duration;
   bool visible;
@@ -108,9 +111,7 @@ class SSBottomNavBarSettings {
       this.color,
       this.selectedColor,
       this.unselectedColor,
-      this.onTabSelected,
       this.shadow,
-      this.selected,
       this.isWidthFixed,
       this.visible,
       this.duration});
