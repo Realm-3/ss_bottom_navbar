@@ -12,7 +12,7 @@ Flutter modern bottom nav bar. Compatible with Android & iOS. You can customize 
 
 ```yaml
 dependencies:
-  ss_bottom_navbar: 0.0.10
+  ss_bottom_navbar: 0.1.0
 ```
 
 ```bash
@@ -28,9 +28,10 @@ import 'package:ss_bottom_navbar/src/ss_bottom_navbar.dart';
 ### SSBottomNav
 
 
-##### Usage
+#### Usage
+##### Create Items
 ```dart
-var items = [
+final items = [
   SSBottomNavItem(text: 'Home', iconData: Icons.home),
   SSBottomNavItem(text: 'Store', iconData: Icons.store),
   SSBottomNavItem(text: 'Add', iconData: Icons.add, isIconOnly: true),
@@ -38,9 +39,14 @@ var items = [
   SSBottomNavItem(text: 'Profile', iconData: Icons.person),
 ];
 ```
+##### Create the state
+```dart
+SSBottomBarState _state = SSBottomBarState();
+```
 ```dart
 SSBottomNav(
   items: items,
+  state: _state,
   color: Colors.black,
   selectedColor: Colors.white,
   unselectedColor: Colors.black,
@@ -56,6 +62,7 @@ SSBottomNav(
 ```dart
 SSBottomNav(
   items: items,
+  state: _state,
   color: Colors.black,
   selectedColor: Colors.white,
   unselectedColor: Colors.black,
@@ -70,6 +77,7 @@ SSBottomNav(
 |Name|  Type| Description|
 |--|--|--|
 | `items` |`List<SSBottomNavItem>`| list of `SSBottomNavItem` items |
+| `state` |`SSBottomBarState`| state of the bottome bar as `ChangeNotifier` |
 |`iconSize`| `double`| size of the icon on items |
 | `backgroundColor`| `Color` | background color of the widget|
 | `color`| `Color`| color of the slider |
