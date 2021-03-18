@@ -51,7 +51,7 @@ SSBottomNav(
   selectedColor: Colors.white,
   unselectedColor: Colors.black,
   onTabSelected: (index) {
-     print(index);
+     debugPrint(index);
      setState(() {
         _index = index;
     });

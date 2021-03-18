@@ -167,12 +167,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
   bool _didUpdateWidget = false;
   bool _isDismissedByAnimation;
 
-  _onPressed(Offset offset) async {
+  Future<void> _onPressed(Offset offset) async {
     _isDismissedByAnimation = true;
 
     for (var pos in _service.positions) {
       final index = _service.positions.indexOf(pos);
-      final rect1 = {'x': pos.dx, 'y': pos.dy, 'width': _service.sizes[index].dx, 'height': _service.sizes[index].dy};
+      final rect1 = {
+        'x': pos.dx,
+        'y': pos.dy,
+        'width': _service.sizes[index].dx,
+        'height': _service.sizes[index].dy
+      };
       final rect2 = {'x': offset.dx, 'y': offset.dy, 'width': 1, 'height': 1};
 
       if (rect1['x'] < rect2['x'] + rect2['width'] &&
@@ -191,8 +196,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     }
   }
 
-  _dismissedByAnimation(bool condition) {
-    print('asdas $condition');
+  void _dismissedByAnimation(bool condition) {
     if (condition && _isDismissedByAnimation) {
       if (!widget.bottomSheetHistory) return;
 
@@ -220,13 +224,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
               visible: widget.visible,
               duration: widget.duration));
 
-      if (!_isInit)
+      if (!_isInit) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          await Future.delayed(Duration(milliseconds: 50));
+          await Future<void>.delayed(Duration(milliseconds: 50));
 
           _service.setSelected(0);
           _isInit = true;
         });
+      }
     }
 
     if (_didUpdateWidget) {
@@ -247,9 +252,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
             height: kBottomNavigationBarHeight,
             child: Stack(
               children: [
-                Container(
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: _service.items.map((e) => EmptyItem(e)).toList()),
-                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: _service.items.map((e) => EmptyItem(e)).toList()),
                 Container(
                   color: widget.backgroundColor ?? Colors.white,
                 ),
@@ -262,9 +267,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                           .map((e) => NavItem(
                                 e,
                                 onTab: () {
-                                  var index = _service.items.indexOf(e);
-
-                                  print(index == widget.showBottomSheetAt);
+                                  final index = _service.items.indexOf(e);
 
                                   if (index == widget.showBottomSheetAt) {
                                     _service.clickedIndex = index;
@@ -301,7 +304,12 @@ class SSBottomNavItem {
   final double iconSize;
   final bool isIconOnly;
 
-  SSBottomNavItem({@required this.text, this.textStyle, @required this.iconData, this.iconSize = 16, this.isIconOnly = false});
+  SSBottomNavItem(
+      {@required this.text,
+      this.textStyle,
+      @required this.iconData,
+      this.iconSize = 16,
+      this.isIconOnly = false});
 }
 
 class SSBottomSheet extends StatefulWidget {
@@ -311,19 +319,28 @@ class SSBottomSheet extends StatefulWidget {
   final double bottomMargin;
   final ValueChanged<bool> dismissedByAnimation;
 
-  SSBottomSheet({Key key, this.backgroundColor, this.child, this.onPressed, this.bottomMargin, this.dismissedByAnimation}) : super(key: key);
+  const SSBottomSheet(
+      {Key key,
+      this.backgroundColor,
+      this.child,
+      this.onPressed,
+      this.bottomMargin,
+      this.dismissedByAnimation})
+      : super(key: key);
 
   @override
   _SSBottomSheetState createState() => _SSBottomSheetState();
 
-  static show(
-      {@required BuildContext context,
-      @required child,
-      backgroundColor = const Color(0xb3212121),
-      double bottomMargin,
-      ValueChanged<bool> dismissedByAnimation,
-      ValueChanged<Offset> onPressed}) {
-    Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
+  static void show({
+    @required BuildContext context,
+    @required Widget child,
+    Color backgroundColor = const Color(0xb3212121),
+    double bottomMargin,
+    ValueChanged<bool> dismissedByAnimation,
+    ValueChanged<Offset> onPressed,
+  }) {
+    Navigator.of(context, rootNavigator: true).push(
+      PageRouteBuilder<void>(
         pageBuilder: (_, __, ___) {
           return SSBottomSheet(
               child: child,
@@ -332,7 +349,9 @@ class SSBottomSheet extends StatefulWidget {
               bottomMargin: bottomMargin,
               dismissedByAnimation: dismissedByAnimation);
         },
-        opaque: false));
+        opaque: false,
+      ),
+    );
   }
 }
 
@@ -343,7 +362,7 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
   final GlobalKey _childKey = GlobalKey();
 
   double get _childHeight {
-    final RenderBox renderBox = _childKey.currentContext.findRenderObject();
+    final renderBox = _childKey.currentContext.findRenderObject() as RenderBox;
     return renderBox.size.height;
   }
 
@@ -409,7 +428,8 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
     final width = media.size.width;
-    final bottomBarHeight = widget.bottomMargin ?? kBottomNavigationBarHeight + media.padding.bottom;
+    final bottomBarHeight =
+        widget.bottomMargin ?? kBottomNavigationBarHeight + media.padding.bottom;
 
     return WillPopScope(
         onWillPop: onBackPressed,
@@ -435,10 +455,14 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
                             animation: _animation,
                             builder: (context, _) {
                               return Transform(
-                                transform: Matrix4.translationValues(0.0, width * _animation.value, 0.0),
+                                transform:
+                                    Matrix4.translationValues(0.0, width * _animation.value, 0.0),
                                 child: Container(
                                   width: width,
-                                  child: GestureDetector(behavior: HitTestBehavior.opaque, onTap: () {}, child: widget.child),
+                                  child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTap: () {},
+                                      child: widget.child),
                                 ),
                               );
                             }),

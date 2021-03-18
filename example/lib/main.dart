@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "SS Bottom NavBar Example App",
+      title: 'SS Bottom NavBar Example App',
       home: App(),
     );
   }
@@ -23,7 +23,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   SSBottomBarState _state;
-  bool _isVisible = true;
+  final _isVisible = true;
 
   final _colors = [Colors.red, Colors.blue, Colors.green, Colors.orange, Colors.teal];
   final items = [
@@ -52,10 +52,10 @@ class _AppState extends State<App> {
             children: _buildPages(),
           ),
           floatingActionButton: FloatingActionButton(
-            child: Icon(_isVisible ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
             onPressed: () {
               _state.setSelected(3);
             },
+            child: Icon(_isVisible ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
           ),
           bottomNavigationBar: SSBottomNav(
             items: items,
