@@ -19,13 +19,17 @@ class _SlideBoxState extends State<SlideBox> with TickerProviderStateMixin {
     var _topPadding = (kBottomNavigationBarHeight - _height) / 2;
 
     var _sizeX = _service.items[_service.selected].isIconOnly
-        ? _service.sizes[_service.selected].dx
-        : _service.settings.isWidthFixed
-            ? _service.sizesBig.reduce((curr, next) => curr.dx > next.dx ? curr : next).dx
+        ? _service.sizes[_service.selected]!.dx
+        : _service.settings!.isWidthFixed!
+            ? _service.sizesBig
+                .reduce((curr, next) => curr.dx > next.dx ? curr : next)
+                .dx
             : _service.state == SSBottomNavBarState.text
                 ? _service.sizesBig[_service.selected].dx
-                : _service.sizes[_service.selected].dx;
-    var _posX = _service.state == SSBottomNavBarState.text ? _service.positionsBig[_service.selected].dx : _service.positions[_service.selected].dx;
+                : _service.sizes[_service.selected]!.dx;
+    var _posX = _service.state == SSBottomNavBarState.text
+        ? _service.positionsBig[_service.selected].dx
+        : _service.positions[_service.selected]!.dx;
 
     var _width = _sizeX + _sizeFactor * 2;
 
@@ -41,10 +45,15 @@ class _SlideBoxState extends State<SlideBox> with TickerProviderStateMixin {
               height: _height,
               margin: EdgeInsets.only(top: _topPadding),
               decoration: BoxDecoration(
-                  color: _service.settings.color,
+                  color: _service.settings!.color,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
-                  boxShadow:
-                      _service.settings.shadow ?? [BoxShadow(offset: Offset(0, 3), blurRadius: 6, color: const Color(0xff000000).withOpacity(0.16))]),
+                  boxShadow: _service.settings!.shadow ??
+                      [
+                        BoxShadow(
+                            offset: Offset(0, 3),
+                            blurRadius: 6,
+                            color: const Color(0xff000000).withOpacity(0.16))
+                      ]),
               child: AnimatedSize(
                 curve: Curves.ease,
                 child: new Container(

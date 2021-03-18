@@ -6,8 +6,8 @@ import '../service.dart';
 
 class NavItem extends StatefulWidget {
   final SSBottomNavItem ssBottomNavItem;
-  final bool isActive;
-  final void Function() onTab;
+  final bool? isActive;
+  final void Function()? onTab;
 
   const NavItem(this.ssBottomNavItem, {this.isActive, this.onTab});
 
@@ -16,7 +16,7 @@ class NavItem extends StatefulWidget {
 }
 
 class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
-  bool _isActive = false;
+  bool? _isActive = false;
   bool _isInit = false;
 
   @override
@@ -38,7 +38,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
     _isActive = service.selected == _index;
 
     void _postFrameCallback() {
-      final renderBoxRed = _key.currentContext.findRenderObject() as RenderBox;
+      final renderBoxRed = _key.currentContext!.findRenderObject() as RenderBox;
       final positionRed = renderBoxRed.localToGlobal(Offset.zero);
 
       setState(() {
@@ -47,12 +47,12 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
 
       service.setSizeAndPosition(
         index: _index,
-        size: Offset(_key.currentContext.size.width, _key.currentContext.size.height),
+        size: Offset(_key.currentContext!.size!.width, _key.currentContext!.size!.height),
         position: positionRed,
       );
     }
 
-    if (!_isInit) WidgetsBinding.instance.addPostFrameCallback((_) => _postFrameCallback());
+    if (!_isInit) WidgetsBinding.instance!.addPostFrameCallback((_) => _postFrameCallback());
 
     return Container(
       alignment: Alignment.center,
@@ -63,7 +63,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
               left: service.items[service.selected].isIconOnly
                   ? 0
                   : _selected
-                      ? service.settings.isWidthFixed
+                      ? service.settings!.isWidthFixed!
                           ? (service.sizesBig
                                   .reduce((curr, next) => curr.dx > next.dx ? curr : next)
                                   .dx -
@@ -80,9 +80,10 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
               children: [
                 Icon(
                   widget.ssBottomNavItem.iconData,
-                  color:
-                      _isActive ? service.settings.selectedColor : service.settings.unselectedColor,
-                  size: widget.ssBottomNavItem.iconSize ?? service.settings.iconSize ?? 16,
+                  color: _isActive!
+                      ? service.settings!.selectedColor
+                      : service.settings!.unselectedColor,
+                  size: widget.ssBottomNavItem.iconSize,
                 ),
                 AnimatedSize(
                   curve: Curves.easeOutExpo,
@@ -93,7 +94,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
                         ? 0
                         : service.state == SSBottomNavBarState.icon
                             ? 0
-                            : _isActive
+                            : _isActive!
                                 ? null
                                 : 0,
                     child: Row(
@@ -105,9 +106,9 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
                         Text(
                           widget.ssBottomNavItem.text,
                           style: _textStyle.apply(
-                              color: _isActive
-                                  ? service.settings.selectedColor
-                                  : service.settings.unselectedColor),
+                              color: _isActive!
+                                  ? service.settings!.selectedColor
+                                  : service.settings!.unselectedColor),
                         ),
                       ],
                     ),

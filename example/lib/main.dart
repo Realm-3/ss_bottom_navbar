@@ -22,10 +22,16 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  SSBottomBarState _state;
+  SSBottomBarState? _state;
   final _isVisible = true;
 
-  final _colors = [Colors.red, Colors.blue, Colors.green, Colors.orange, Colors.teal];
+  final _colors = [
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+    Colors.orange,
+    Colors.teal
+  ];
   final items = [
     SSBottomNavItem(text: 'Home', iconData: Icons.home),
     SSBottomNavItem(text: 'Store', iconData: Icons.store),
@@ -48,18 +54,20 @@ class _AppState extends State<App> {
         context.watch<SSBottomBarState>();
         return Scaffold(
           body: IndexedStack(
-            index: _state.selected,
+            index: _state!.selected,
             children: _buildPages(),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              _state.setSelected(3);
+              _state!.setSelected(3);
             },
-            child: Icon(_isVisible ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
+            child: Icon(_isVisible
+                ? Icons.keyboard_arrow_down
+                : Icons.keyboard_arrow_up),
           ),
           bottomNavigationBar: SSBottomNav(
             items: items,
-            state: _state,
+            state: _state!,
             color: Colors.black,
             selectedColor: Colors.white,
             unselectedColor: Colors.black,

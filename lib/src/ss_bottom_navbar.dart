@@ -10,24 +10,24 @@ import 'package:ss_bottom_navbar/src/views/slide_box.dart';
 class SSBottomNav extends StatefulWidget {
   final List<SSBottomNavItem> items;
   final SSBottomBarState state;
-  final double iconSize;
-  final Color backgroundColor;
-  final Color color;
-  final Color selectedColor;
-  final Color unselectedColor;
-  final List<BoxShadow> shadow;
+  final double? iconSize;
+  final Color? backgroundColor;
+  final Color? color;
+  final Color? selectedColor;
+  final Color? unselectedColor;
+  final List<BoxShadow>? shadow;
   final bool visible;
-  final Widget bottomSheetWidget;
+  final Widget? bottomSheetWidget;
   final int showBottomSheetAt;
   final bool bottomSheetHistory;
-  final int selected;
-  final Duration duration;
+  final int? selected;
+  final Duration? duration;
 
 //  final bool isWidthFixed;
 
-  SSBottomNav({
-    @required this.items,
-    @required this.state,
+  const SSBottomNav({
+    required this.items,
+    required this.state,
     this.iconSize,
     this.backgroundColor,
     this.color,
@@ -41,7 +41,7 @@ class SSBottomNav extends StatefulWidget {
     this.visible = true,
     this.bottomSheetHistory = true,
 //      this.isWidthFixed = false
-  }) : assert(state != null);
+  });
 
   @override
   _SSBottomNavState createState() => _SSBottomNavState();
@@ -71,21 +71,21 @@ class _SSBottomNavState extends State<SSBottomNav> {
 
 class _App extends StatelessWidget {
   final List<SSBottomNavItem> items;
-  final double iconSize;
-  final Color backgroundColor;
-  final Color color;
-  final Color selectedColor;
-  final Color unselectedColor;
-  final List<BoxShadow> shadow;
-  final bool visible;
-  final Widget bottomSheetWidget;
-  final int showBottomSheetAt;
-  final Duration duration;
-  final bool bottomSheetHistory;
-  final int selected;
+  final double? iconSize;
+  final Color? backgroundColor;
+  final Color? color;
+  final Color? selectedColor;
+  final Color? unselectedColor;
+  final List<BoxShadow>? shadow;
+  final bool? visible;
+  final Widget? bottomSheetWidget;
+  final int? showBottomSheetAt;
+  final Duration? duration;
+  final bool? bottomSheetHistory;
+  final int? selected;
 
-  _App({
-    @required this.items,
+  const _App({
+    required this.items,
     this.iconSize,
     this.backgroundColor,
     this.color,
@@ -102,10 +102,10 @@ class _App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).padding;
+    final size = MediaQuery.of(context).padding;
 
     return Container(
-        height: visible ? kBottomNavigationBarHeight + size.bottom : 0,
+        height: visible! ? kBottomNavigationBarHeight + size.bottom : 0,
         child: BottomNavBar(
             items: items,
             iconSize: iconSize,
@@ -126,22 +126,22 @@ class _App extends StatelessWidget {
 
 class BottomNavBar extends StatefulWidget {
   final List<SSBottomNavItem> items;
-  final double iconSize;
-  final Color backgroundColor;
-  final Color color;
-  final Color selectedColor;
-  final Color unselectedColor;
-  final List<BoxShadow> shadow;
-  final int selected;
-  final bool isWidthFixed;
-  final Duration duration;
-  final bool visible;
-  final Widget bottomSheetWidget;
-  final int showBottomSheetAt;
-  final bool bottomSheetHistory;
+  final double? iconSize;
+  final Color? backgroundColor;
+  final Color? color;
+  final Color? selectedColor;
+  final Color? unselectedColor;
+  final List<BoxShadow>? shadow;
+  final int? selected;
+  final bool? isWidthFixed;
+  final Duration? duration;
+  final bool? visible;
+  final Widget? bottomSheetWidget;
+  final int? showBottomSheetAt;
+  final bool? bottomSheetHistory;
 
-  BottomNavBar(
-      {@required this.items,
+  const BottomNavBar(
+      {required this.items,
       this.iconSize,
       this.backgroundColor,
       this.color,
@@ -161,33 +161,33 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  SSBottomBarState _service;
+  late SSBottomBarState _service;
   bool _isInit = false;
   int _tempIndex = 0;
   bool _didUpdateWidget = false;
-  bool _isDismissedByAnimation;
+  late bool _isDismissedByAnimation;
 
   Future<void> _onPressed(Offset offset) async {
     _isDismissedByAnimation = true;
 
-    for (var pos in _service.positions) {
+    for (final pos in _service.positions) {
       final index = _service.positions.indexOf(pos);
       final rect1 = {
-        'x': pos.dx,
+        'x': pos!.dx,
         'y': pos.dy,
-        'width': _service.sizes[index].dx,
-        'height': _service.sizes[index].dy
+        'width': _service.sizes[index]!.dx,
+        'height': _service.sizes[index]!.dy
       };
       final rect2 = {'x': offset.dx, 'y': offset.dy, 'width': 1, 'height': 1};
 
-      if (rect1['x'] < rect2['x'] + rect2['width'] &&
-          rect1['x'] + rect1['width'] > rect2['x'] &&
-          rect1['y'] < rect2['y'] + rect2['height'] &&
-          rect1['y'] + rect1['height'] > rect2['y']) {
+      if (rect1['x']! < rect2['x']! + rect2['width']! &&
+          rect1['x']! + rect1['width']! > rect2['x']! &&
+          rect1['y']! < rect2['y']! + rect2['height']! &&
+          rect1['y']! + rect1['height']! > rect2['y']!) {
         Navigator.maybePop(context);
         _service.clickedIndex = index;
 
-        final condition = index == widget.showBottomSheetAt && widget.bottomSheetHistory;
+        final condition = index == widget.showBottomSheetAt && widget.bottomSheetHistory!;
 
         _service.setSelected(condition ? _tempIndex : index);
         _isDismissedByAnimation = false;
@@ -198,7 +198,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   void _dismissedByAnimation(bool condition) {
     if (condition && _isDismissedByAnimation) {
-      if (!widget.bottomSheetHistory) return;
+      if (!widget.bottomSheetHistory!) return;
 
       _service.setSelected(_tempIndex);
       _service.clickedIndex = _tempIndex;
@@ -225,7 +225,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               duration: widget.duration));
 
       if (!_isInit) {
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
+        WidgetsBinding.instance!.addPostFrameCallback((_) async {
           await Future<void>.delayed(Duration(milliseconds: 50));
 
           _service.setSelected(0);
@@ -235,13 +235,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
     }
 
     if (_didUpdateWidget) {
-      _service.setSelected(widget.selected, didUpdateWidget: true);
+      _service.setSelected(widget.selected!, didUpdateWidget: true);
       _didUpdateWidget = false;
     }
 
     return Visibility(
       key: ValueKey(1),
-      visible: widget.visible,
+      visible: widget.visible!,
       maintainState: true,
       maintainAnimation: true,
       child: Material(
@@ -299,28 +299,28 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
 class SSBottomNavItem {
   final String text;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final IconData iconData;
   final double iconSize;
   final bool isIconOnly;
 
   SSBottomNavItem(
-      {@required this.text,
+      {required this.text,
       this.textStyle,
-      @required this.iconData,
+      required this.iconData,
       this.iconSize = 16,
       this.isIconOnly = false});
 }
 
 class SSBottomSheet extends StatefulWidget {
-  final Color backgroundColor;
-  final Widget child;
-  final ValueChanged<Offset> onPressed;
-  final double bottomMargin;
-  final ValueChanged<bool> dismissedByAnimation;
+  final Color? backgroundColor;
+  final Widget? child;
+  final ValueChanged<Offset>? onPressed;
+  final double? bottomMargin;
+  final ValueChanged<bool>? dismissedByAnimation;
 
   const SSBottomSheet(
-      {Key key,
+      {Key? key,
       this.backgroundColor,
       this.child,
       this.onPressed,
@@ -332,22 +332,23 @@ class SSBottomSheet extends StatefulWidget {
   _SSBottomSheetState createState() => _SSBottomSheetState();
 
   static void show({
-    @required BuildContext context,
-    @required Widget child,
+    required BuildContext context,
+    required Widget? child,
     Color backgroundColor = const Color(0xb3212121),
-    double bottomMargin,
-    ValueChanged<bool> dismissedByAnimation,
-    ValueChanged<Offset> onPressed,
+    double? bottomMargin,
+    ValueChanged<bool>? dismissedByAnimation,
+    ValueChanged<Offset>? onPressed,
   }) {
     Navigator.of(context, rootNavigator: true).push(
       PageRouteBuilder<void>(
         pageBuilder: (_, __, ___) {
           return SSBottomSheet(
-              child: child,
-              backgroundColor: backgroundColor,
-              onPressed: onPressed,
-              bottomMargin: bottomMargin,
-              dismissedByAnimation: dismissedByAnimation);
+            backgroundColor: backgroundColor,
+            onPressed: onPressed,
+            bottomMargin: bottomMargin,
+            dismissedByAnimation: dismissedByAnimation,
+            child: child,
+          );
         },
         opaque: false,
       ),
@@ -356,13 +357,13 @@ class SSBottomSheet extends StatefulWidget {
 }
 
 class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProviderStateMixin {
-  Animation<double> _animation;
-  AnimationController _animationController;
+  late Animation<double> _animation;
+  late AnimationController _animationController;
 
   final GlobalKey _childKey = GlobalKey();
 
   double get _childHeight {
-    final renderBox = _childKey.currentContext.findRenderObject() as RenderBox;
+    final renderBox = _childKey.currentContext!.findRenderObject() as RenderBox;
     return renderBox.size.height;
   }
 
@@ -378,7 +379,7 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
         _pop();
-        widget.dismissedByAnimation.call(true);
+        widget.dismissedByAnimation!.call(true);
       }
     });
     _animationController.forward();
@@ -397,7 +398,7 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
   void _handleDragUpdate(DragUpdateDetails details) {
     if (_dismissUnderway) return;
 
-    final change = details.primaryDelta / (_childHeight ?? details.primaryDelta);
+    final change = details.primaryDelta! / _childHeight;
     _animationController.value -= change;
   }
 
@@ -408,11 +409,16 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
 
     if (details.velocity.pixelsPerSecond.dy > 700) {
       final double flingVelocity = -details.velocity.pixelsPerSecond.dy / _childHeight;
-      if (_animationController.value > 0.0) _animationController.fling(velocity: flingVelocity);
+      if (_animationController.value > 0.0) {
+        _animationController.fling(velocity: flingVelocity);
+      }
     } else if (_animationController.value < 0.5) {
-      if (_animationController.value > 0.0) _animationController.fling(velocity: -1.0);
-    } else
+      if (_animationController.value > 0.0) {
+        _animationController.fling(velocity: -1.0);
+      }
+    } else {
       _animationController.reverse();
+    }
   }
 
   void onTapDown(BuildContext context, TapDownDetails details) {
@@ -421,7 +427,7 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
     final box = context.findRenderObject() as RenderBox;
     final localOffset = box.globalToLocal(details.globalPosition);
 
-    widget.onPressed.call(Offset(localOffset.dx, localOffset.dy));
+    widget.onPressed!.call(Offset(localOffset.dx, localOffset.dy));
   }
 
   @override
@@ -437,43 +443,40 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
           onVerticalDragUpdate: _handleDragUpdate,
           onVerticalDragEnd: _handleDragEnd,
           onTapDown: (TapDownDetails details) => onTapDown(context, details),
-          child: Container(
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Container(
-                color: widget.backgroundColor,
-                margin: EdgeInsets.only(bottom: bottomBarHeight),
-                child: Column(
-                  key: _childKey,
-                  children: <Widget>[
-                    Spacer(),
-                    ClipRect(
-                      child: FittedBox(
-                        alignment: Alignment.center,
-                        fit: BoxFit.fitWidth,
-                        child: AnimatedBuilder(
-                            animation: _animation,
-                            builder: (context, _) {
-                              return Transform(
-                                transform:
-                                    Matrix4.translationValues(0.0, width * _animation.value, 0.0),
-                                child: Container(
-                                  width: width,
-                                  child: GestureDetector(
-                                      behavior: HitTestBehavior.opaque,
-                                      onTap: () {},
-                                      child: widget.child),
-                                ),
-                              );
-                            }),
-                      ),
+          excludeFromSemantics: true,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Container(
+              color: widget.backgroundColor,
+              margin: EdgeInsets.only(bottom: bottomBarHeight),
+              child: Column(
+                key: _childKey,
+                children: <Widget>[
+                  Spacer(),
+                  ClipRect(
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: AnimatedBuilder(
+                          animation: _animation,
+                          builder: (context, _) {
+                            return Transform(
+                              transform:
+                                  Matrix4.translationValues(0.0, width * _animation.value, 0.0),
+                              child: Container(
+                                width: width,
+                                child: GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {},
+                                    child: widget.child),
+                              ),
+                            );
+                          }),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-          excludeFromSemantics: true,
         ));
   }
 
