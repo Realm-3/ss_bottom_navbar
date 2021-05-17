@@ -5,9 +5,9 @@ import 'package:ss_bottom_navbar/src/ss_bottom_navbar.dart';
 
 class EmptyItem extends StatefulWidget {
   final SSBottomNavItem ssBottomNavItem;
-  final int selected;
+  final int? selected;
 
-  EmptyItem(this.ssBottomNavItem, {this.selected});
+  const EmptyItem(this.ssBottomNavItem, {this.selected});
 
   @override
   EmptyItemState createState() => EmptyItemState();
@@ -15,37 +15,39 @@ class EmptyItem extends StatefulWidget {
 
 class EmptyItemState extends State<EmptyItem> {
   bool _isInit = false;
-  var _key = GlobalKey();
+  final _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    var service = Provider.of<SSBottomBarState>(context);
+    final service = Provider.of<SSBottomBarState>(context);
 
-    var index = service.items.indexOf(widget.ssBottomNavItem);
-    var selected = service.emptySelectedIndex == index;
+    final index = service.items.indexOf(widget.ssBottomNavItem);
+    final selected = service.emptySelectedIndex == index;
 
-    _postFrameCallback() async {
+    Future<void> _postFrameCallback() async {
       _isInit = true;
 
       if (!selected) return;
 
       try {
-        await Future.delayed(Duration(milliseconds: 200 + index * 12));
+        await Future<void>.delayed(Duration(milliseconds: 200 + index * 12));
 
-        RenderBox box = _key.currentContext.findRenderObject();
-        Offset position = box.localToGlobal(Offset.zero);
+        final box = _key.currentContext!.findRenderObject() as RenderBox;
+        final position = box.localToGlobal(Offset.zero);
 
         service.positionsBig[service.emptySelectedIndex] = position;
-        service.sizesBig[service.emptySelectedIndex] = Offset(_key.currentContext.size.width, _key.currentContext.size.height);
+        service.sizesBig[service.emptySelectedIndex] = Offset(_key.currentContext!.size!.width, _key.currentContext!.size!.height);
 
         service.setEmptySelectedIndex(index + 1);
-      } catch (e) {}
+      } catch (e) {
+        debugPrintStack(label: e.toString());
+      }
     }
 
     if (service.sizesBig[index] == Offset.zero &&
         service.positionsBig[index] == Offset.zero &&
         service.emptySelectedIndex <= service.items.length - 1) {
-      if (!_isInit) WidgetsBinding.instance.addPostFrameCallback((_) => _postFrameCallback());
+      if (!_isInit) WidgetsBinding.instance!.addPostFrameCallback((_) => _postFrameCallback());
       if (selected) _postFrameCallback();
     }
 
@@ -55,10 +57,7 @@ class EmptyItemState extends State<EmptyItem> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            widget.ssBottomNavItem.iconData,
-            size: widget.ssBottomNavItem.iconSize ?? service.settings.iconSize ?? 16,
-          ),
+          Icon(widget.ssBottomNavItem.iconData, size: service.settings?.iconSize ?? widget.ssBottomNavItem.iconSize),
           if (selected && !widget.ssBottomNavItem.isIconOnly) ...[
             SizedBox(
               width: 5,

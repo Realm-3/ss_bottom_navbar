@@ -79,3 +79,13 @@
 ### Fixed
 
 -  #23
+
+## 0.1.1 - 2021-05-17
+
+### Fixed
+
+-  #27
+
+### Update
+
+-  #23 still continues

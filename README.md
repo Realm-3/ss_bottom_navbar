@@ -12,7 +12,7 @@ Flutter modern bottom nav bar. Compatible with Android & iOS. You can customize 
 
 ```yaml
 dependencies:
-  ss_bottom_navbar: 0.1.0
+  ss_bottom_navbar: 0.1.1
 ```
 
 ```bash
@@ -51,7 +51,7 @@ SSBottomNav(
   selectedColor: Colors.white,
   unselectedColor: Colors.black,
   onTabSelected: (index) {
-     print(index);
+     debugPrint(index);
      setState(() {
         _index = index;
     });
