@@ -14,12 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Publish Dart/Flutter package
-        uses: sakebook/actions-flutter-pub-publisher@v1.3.1
+        uses: k-paxian/dart-package-publisher@master
         with:
-          credential: ${{ secrets.DART_PUB_CREDENTIAL_JSON }}
-          flutter_package: true
-          skip_test: true
-          dry_run: true
+          flutter: true
+          skipTests: true
+          dryRunOnly: true
+          credentialJson: ${{ secrets.DART_PUB_CREDENTIAL_JSON }}
   deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
@@ -27,9 +27,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Publish Dart/Flutter package
-        uses: sakebook/actions-flutter-pub-publisher@v1.3.1
+        uses: k-paxian/dart-package-publisher@master
         with:
-          credential: ${{ secrets.DART_PUB_CREDENTIAL_JSON }}
-          flutter_package: true
-          skip_test: true
-          dry_run: false
+          flutter: true
+          skipTests: true
+          credentialJson: ${{ secrets.DART_PUB_CREDENTIAL_JSON }}
