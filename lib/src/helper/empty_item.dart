@@ -36,8 +36,7 @@ class EmptyItemState extends State<EmptyItem> {
         final position = box.localToGlobal(Offset.zero);
 
         service.positionsBig[service.emptySelectedIndex] = position;
-        service.sizesBig[service.emptySelectedIndex] = Offset(
-            _key.currentContext!.size!.width, _key.currentContext!.size!.height);
+        service.sizesBig[service.emptySelectedIndex] = Offset(_key.currentContext!.size!.width, _key.currentContext!.size!.height);
 
         service.setEmptySelectedIndex(index + 1);
       } catch (e) {
@@ -48,9 +47,7 @@ class EmptyItemState extends State<EmptyItem> {
     if (service.sizesBig[index] == Offset.zero &&
         service.positionsBig[index] == Offset.zero &&
         service.emptySelectedIndex <= service.items.length - 1) {
-      if (!_isInit)
-        WidgetsBinding.instance!
-            .addPostFrameCallback((_) => _postFrameCallback());
+      if (!_isInit) WidgetsBinding.instance!.addPostFrameCallback((_) => _postFrameCallback());
       if (selected) _postFrameCallback();
     }
 
@@ -60,20 +57,14 @@ class EmptyItemState extends State<EmptyItem> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            widget.ssBottomNavItem.iconData,
-            size: widget.ssBottomNavItem.iconSize ??
-                service.settings!.iconSize ??
-                16,
-          ),
+          Icon(widget.ssBottomNavItem.iconData, size: service.settings?.iconSize ?? widget.ssBottomNavItem.iconSize),
           if (selected && !widget.ssBottomNavItem.isIconOnly) ...[
             SizedBox(
               width: 5,
             ),
             Text(
               widget.ssBottomNavItem.text,
-              style:
-                  widget.ssBottomNavItem.textStyle ?? TextStyle(fontSize: 14),
+              style: widget.ssBottomNavItem.textStyle ?? TextStyle(fontSize: 14),
             ),
           ]
         ],

@@ -172,12 +172,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
     for (final pos in _service.positions) {
       final index = _service.positions.indexOf(pos);
-      final rect1 = {
-        'x': pos!.dx,
-        'y': pos.dy,
-        'width': _service.sizes[index]!.dx,
-        'height': _service.sizes[index]!.dy
-      };
+      final rect1 = {'x': pos!.dx, 'y': pos.dy, 'width': _service.sizes[index]!.dx, 'height': _service.sizes[index]!.dy};
       final rect2 = {'x': offset.dx, 'y': offset.dy, 'width': 1, 'height': 1};
 
       if (rect1['x']! < rect2['x']! + rect2['width']! &&
@@ -252,9 +247,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             height: kBottomNavigationBarHeight,
             child: Stack(
               children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: _service.items.map((e) => EmptyItem(e)).toList()),
+                Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: _service.items.map((e) => EmptyItem(e)).toList()),
                 Container(
                   color: widget.backgroundColor ?? Colors.white,
                 ),
@@ -304,12 +297,7 @@ class SSBottomNavItem {
   final double iconSize;
   final bool isIconOnly;
 
-  SSBottomNavItem(
-      {required this.text,
-      this.textStyle,
-      required this.iconData,
-      this.iconSize = 16,
-      this.isIconOnly = false});
+  SSBottomNavItem({required this.text, this.textStyle, required this.iconData, this.iconSize = 16, this.isIconOnly = false});
 }
 
 class SSBottomSheet extends StatefulWidget {
@@ -319,14 +307,7 @@ class SSBottomSheet extends StatefulWidget {
   final double? bottomMargin;
   final ValueChanged<bool>? dismissedByAnimation;
 
-  const SSBottomSheet(
-      {Key? key,
-      this.backgroundColor,
-      this.child,
-      this.onPressed,
-      this.bottomMargin,
-      this.dismissedByAnimation})
-      : super(key: key);
+  const SSBottomSheet({Key? key, this.backgroundColor, this.child, this.onPressed, this.bottomMargin, this.dismissedByAnimation}) : super(key: key);
 
   @override
   _SSBottomSheetState createState() => _SSBottomSheetState();
@@ -434,8 +415,7 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
     final width = media.size.width;
-    final bottomBarHeight =
-        widget.bottomMargin ?? kBottomNavigationBarHeight + media.padding.bottom;
+    final bottomBarHeight = widget.bottomMargin ?? kBottomNavigationBarHeight + media.padding.bottom;
 
     return WillPopScope(
         onWillPop: onBackPressed,
@@ -460,14 +440,10 @@ class _SSBottomSheetState extends State<SSBottomSheet> with SingleTickerProvider
                           animation: _animation,
                           builder: (context, _) {
                             return Transform(
-                              transform:
-                                  Matrix4.translationValues(0.0, width * _animation.value, 0.0),
+                              transform: Matrix4.translationValues(0.0, width * _animation.value, 0.0),
                               child: Container(
                                 width: width,
-                                child: GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () {},
-                                    child: widget.child),
+                                child: GestureDetector(behavior: HitTestBehavior.opaque, onTap: () {}, child: widget.child),
                               ),
                             );
                           }),
