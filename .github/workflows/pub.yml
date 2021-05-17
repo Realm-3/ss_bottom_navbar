@@ -18,8 +18,7 @@ jobs:
         with:
           skipTests: true
           dryRunOnly: true
-          accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
-          refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
+          credentialJson: ${{ secrets.DART_PUB_CREDENTIAL_JSON }}
   deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
@@ -30,5 +29,4 @@ jobs:
         uses: k-paxian/dart-package-publisher@master
         with:
           skipTests: true
-          accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
-          refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
+          credentialJson: ${{ secrets.DART_PUB_CREDENTIAL_JSON }}
